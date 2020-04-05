@@ -6,7 +6,7 @@
   "scripts": {
     "build-ts": "tsc",
     "postinstall": "npm run build-ts",
-    "start": "npm run inicio",
+    "start": "npm install && npm run inicio",
     "inicio": "node dist/Inicio.js",
     "watch-node": "nodemon dist/Inicio.js",
     "watch-ts": "tsc -w"
@@ -25,5 +25,8 @@
     "@types/express": "^4.16.0",
     "express": "^4.16.3",
     "discord.js": "11.1.0"
+  },
+  "engines": {
+    "node": "13.x"
   }
 }
