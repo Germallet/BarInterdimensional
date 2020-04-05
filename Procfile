@@ -1,1 +1,1 @@
-web: node dist/inicio.js
+web: node dist/Inicio.js
