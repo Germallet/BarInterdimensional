@@ -4,13 +4,9 @@
   "description": "",
   "main": "dist/Inicio.js",
   "scripts": {
-    "build-ts": "tsc",
-    "postinstall": "npm run build-ts",
-    "start": "npm run compilarTS && npm run iniciar",
-    "compilarTS": "npm run build-ts",
-    "iniciar": "node dist/Inicio.js",
-    "watch-node": "nodemon dist/Inicio.js",
-    "watch-ts": "tsc -w"
+    "start": "node build/Index.js",
+    "build": "tsc",
+    "postinstall": "npm run build"
   },
   "author": "",
   "license": "ISC",
