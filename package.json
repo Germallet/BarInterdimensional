@@ -5,8 +5,8 @@
   "main": "dist/Inicio.js",
   "scripts": {
     "start": "node build/Index.js",
-    "build": "tsc",
-    "postinstall": "npm run build"
+    "postinstall": "npm run tsc",
+    "tsc": "tsc"
   },
   "author": "",
   "license": "ISC",
