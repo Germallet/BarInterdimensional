@@ -2,9 +2,9 @@
   "name": "BarInterdimensional",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/Inicio.js",
+  "main": "dist/inicio.js",
   "scripts": {
-    "start": "node dist/Inicio.js",
+    "start": "node dist/inicio.js",
     "postinstall": "npm run tsc",
     "tsc": "tsc"
   },
