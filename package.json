@@ -6,8 +6,9 @@
   "scripts": {
     "build-ts": "tsc",
     "postinstall": "npm run build-ts",
-    "start": "npm run serve",
-    "serve": "node dist/Inicio.js",
+    "start": "npm run compilarTS && npm run iniciar",
+    "compilarTS": "npm run build-ts",
+    "iniciar": "node dist/Inicio.js",
     "watch-node": "nodemon dist/Inicio.js",
     "watch-ts": "tsc -w"
   },
