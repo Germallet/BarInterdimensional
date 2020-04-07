@@ -50,22 +50,21 @@ export class AppDiscord {
 // Start your app
 AppDiscord.start();*/
 
-import {
-  Message,
-  Client
-} from "discord.js";
+import * as discord from "discord.js";
 
 export class BotDiscord {
-  private cliente: Client;
+	private readonly cliente: discord.Client = new discord.Client();
 
-  public Start():void {
-    console.log("AA");
-    
-    this.cliente = new Client();
-    this.cliente.login(process.env.DISCORD_BOT_TOKEN).then();
-  }
-
-  async onMessage(message: Message, client: Client) {
-    console.log(message.content);
-  }
+	public Conectarse(): void {
+		this.cliente.on('ready', this.OnReady);
+		this.cliente.on('message', this.OnMessage);
+		this.cliente.login(process.env.DISCORD_BOT_TOKEN);
+	}
+	
+	private OnReady() {
+		console.log('Conectado!');
+	}
+	private async OnMessage(message: discord.Message, client: discord.Client) {
+		console.log(`Nuevo mensaje: ${message.content}`);
+	}
 }

@@ -1,29 +1,29 @@
 {
-  "name": "BarInterdimensional",
-  "version": "1.0.0",
-  "description": "",
-  "main": "dist/inicio.js",
-  "scripts": {
-    "start": "node dist/inicio.js",
-    "postinstall": "npm run tsc",
-    "tsc": "tsc"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "nodemon": "^1.18.3",
-    "tslint": "^5.11.0",
-    "typescript": "^3.0.1"
-  },
-  "dependencies": {
-    "nodemon": "^1.18.3",
-    "tslint": "^5.11.0",
-    "typescript": "^3.0.1",
-    "@types/express": "^4.16.0",
-    "express": "^4.16.3",
-    "discord.js": "11.1.0"
-  },
-  "engines": {
-    "node": "13.x"
-  }
+	"name": "BarInterdimensional",
+	"version": "1.0.0",
+	"description": "",
+	"main": "dist/inicio.js",
+	"scripts": {
+		"start": "node dist/inicio.js",
+		"postinstall": "npm run tsc",
+		"tsc": "tsc"
+	},
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"nodemon": "^1.18.3",
+		"tslint": "^5.11.0",
+		"typescript": "^3.0.1"
+	},
+	"dependencies": {
+		"nodemon": "^1.18.3",
+		"tslint": "^5.11.0",
+		"typescript": "^3.0.1",
+		"@types/express": "^4.16.0",
+		"express": "^4.16.3",
+		"discord.js": "11.1.0"
+	},
+	"engines": {
+		"node": "13.x"
+	}
 }
