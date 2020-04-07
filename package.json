@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/Inicio.js",
   "scripts": {
-    "start": "node build/Index.js",
+    "start": "node dist/Inicio.js",
     "postinstall": "npm run tsc",
     "tsc": "tsc"
   },
