@@ -8,7 +8,7 @@ export class BotDiscord
 	{
 		this.cliente.on('ready', this.OnReady);
 		this.cliente.on('message', this.OnMessage);
-		this.cliente.login(process.env.DISCORD_BOT_TOKEN).then(()=>this.CrearCanal());
+		this.cliente.login(process.env.DISCORD_BOT_TOKEN).then(()=>this.CrearCanal('Prueba')); // PROMESA
 	}
 
 	private OnReady() 
@@ -22,11 +22,14 @@ export class BotDiscord
 		
 	}
 
-	private CrearCanal()
+	private ObtenerServidor(): discord.Guild { return this.cliente.guilds.get('696105418065313934'); }
+	
+	private CrearCanal(nombre: string)
 	{
-		this.cliente.guilds.get('696105418065313934').createChannel('Canal_De_Prueba', 'text')
-		.then(console.log)
-		.catch(console.error);
-		console.log('Canal Creado');
+		this.ObtenerServidor().createChannel(nombre, { type: 'text' }); // PROMESA
+	}
+	private CrearRol(nombre: string)
+	{
+		this.ObtenerServidor().createRole({ name: nombre }); // PROMESA
 	}
 }
