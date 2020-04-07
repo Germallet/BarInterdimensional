@@ -61,8 +61,8 @@ export class BotDiscord {
   public Start():void {
     console.log("AA");
     
-    /*this.cliente = new Client();
-    this.cliente.login(process.env.DISCORD_BOT_TOKEN).then();*/
+    this.cliente = new Client();
+    this.cliente.login(process.env.DISCORD_BOT_TOKEN).then();
   }
 
   async onMessage(message: Message, client: Client) {
