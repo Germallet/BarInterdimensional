@@ -4,26 +4,31 @@ export class Casilla
 {
     private nombre : string;
     private rol : discord.Role;
-    private canalVoz : discord.Channel;
-    private canalTexto : discord.Channel;
+    private canalVoz : discord.VoiceChannel;
+    private canalTexto : discord.TextChannel;
+    private adyacentes: Array<Casilla> = new Array<Casilla>();
     
-    public Crear(servidor : discord.Guild)
+    public constructor(nombre: string)
     {
-        servidor.createRole
-        ({
+        this.nombre = nombre;
+    }
+
+    public async CrearCanales(servidor: discord.Guild, categoria: discord.ChannelResolvable)
+    {
+        this.canalTexto = await servidor.createChannel(this.nombre, { type: 'text', parent: categoria }) as discord.TextChannel; // TODO
+        this.canalVoz = await servidor.createChannel(this.nombre, { type: 'voice', parent: categoria }) as discord.VoiceChannel; // TODO
+    }
+    public async CrearRol(servidor : discord.Guild)
+    {
+        this.rol = await servidor.createRole({
             name: this.nombre,
             color: 'WHITE',
             hoist: false,
             //position?: number;
             permissions: this.Permisos(),
             mentionable: false
-        });
-        
-        this.rol = servidor.roles.get(this.nombre);
+        });  // TODO
 
-        servidor.createChannel(this.nombre, { type: 'text' });
-        servidor.createChannel(this.nombre, { type: 'voice' });
-        
         /*servidor.channels.get(this.nombre).overwritePermissions(this.rol,
         {
             ADMINISTRATOR: false,
@@ -60,6 +65,11 @@ export class Casilla
             MANAGE_WEBHOOKS: false,
             MANAGE_EMOJIS: false
         });*/
+    }
+
+    public AgregarAdyacente(adyacente: Casilla) {
+        this.adyacentes.push(adyacente);
+        this.canalTexto.overwritePermissions
     }
 
     private Permisos()
