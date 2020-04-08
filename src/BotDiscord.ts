@@ -16,7 +16,7 @@ export class BotDiscord
 			let canalViejo = miembroViejo.voiceChannel;
 			let canalNuevo = miembroNuevo.voiceChannel;
 		  
-			if(canalViejo !== canalNuevo) 
+			if(canalViejo !== canalNuevo) // CAMBIO DE CANAL: Sin considerar muteo o ensordecimiento
 			{
 				if(canalViejo === undefined)
 				Consola.Normal('[DISCORD]', `Vale por el rol del canal ${canalNuevo}`); //Agregar rol de casilla de canal nuevo
@@ -24,7 +24,7 @@ export class BotDiscord
 				else if(canalNuevo === undefined)
 				Consola.Normal('[DISCORD]', `Te sacamos el rol del ${canalViejo}`); //Quitar rol de casilla de canal viejo
 
-				else
+				else //if(canalViejo !== canalNuevo)?
 				Consola.Normal('[DISCORD]', `Te cambiamos el rol del ${canalViejo} por el del ${canalNuevo}`);//Quitar rol de casilla de canal viejo y Agregar rol de casilla de canal nuevo
 		  
 			}
