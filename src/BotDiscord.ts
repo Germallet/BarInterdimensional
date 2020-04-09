@@ -2,51 +2,45 @@ import * as discord from "discord.js";
 import { Mundo } from "./Mundo";
 import { Consola } from "./Consola";
 
-export class BotDiscord 
-{
+export class BotDiscord {
 	private readonly cliente: discord.Client = new discord.Client();
+	private readonly mundos: Array<Mundo> = new Array<Mundo>();
 
-	public async Conectarse() 
-	{
+	public async Conectarse() {
 		this.cliente.on('ready', this.OnReady);
 		this.cliente.on('message', this.OnMessage);
 
-		this.cliente.on('voiceStateUpdate', (miembroViejo, miembroNuevo) => 
-		{
-			let canalViejo = miembroViejo.voiceChannel;
-			let canalNuevo = miembroNuevo.voiceChannel;
-		  
-			if(canalViejo !== canalNuevo) // CAMBIO DE CANAL: Sin considerar muteo o ensordecimiento
-			{
-				if(canalViejo === undefined)
-				Consola.Normal('[DISCORD]', `Vale por el rol del canal ${canalNuevo}`); //Agregar rol de casilla de canal nuevo
+		this.cliente.on('voiceStateUpdate', (miembroAnterior, miembroActual) => {
+			if (miembroAnterior.guild !== miembroActual.guild) {
+				this.ObtenerMundo(miembroAnterior.guild)?.Desconexión(miembroAnterior);
+				this.ObtenerMundo(miembroActual.guild)?.Conexión(miembroActual);
+			}
+			else {
+				const canalViejo = miembroAnterior.voiceChannel;
+				const canalNuevo = miembroActual.voiceChannel;
 
-				else if(canalNuevo === undefined)
-				Consola.Normal('[DISCORD]', `Te sacamos el rol del ${canalViejo}`); //Quitar rol de casilla de canal viejo
-
-				else //if(canalViejo !== canalNuevo)?
-				Consola.Normal('[DISCORD]', `Te cambiamos el rol del ${canalViejo} por el del ${canalNuevo}`);//Quitar rol de casilla de canal viejo y Agregar rol de casilla de canal nuevo
-		  
+				if (canalViejo !== canalNuevo)
+					this.ObtenerMundo(miembroActual.guild)?.TransladoDeCanal(miembroActual, canalViejo, canalNuevo);
 			}
 		})
 
 		await this.cliente.login(process.env.DISCORD_BOT_TOKEN); // PROMESA
+
 		this.CrearMundos();
 	}
 
-	private OnReady() 
-	{
+	private OnReady() {
 		Consola.Normal('[DISCORD]', 'Conectado!');
 	}
-	private async OnMessage(message: discord.Message, client: discord.Client) 
-	{
-		Consola.Normal('[DISCORD]', `Nuevo mensaje: ${message.content}`);	
-		Consola.Normal('[DISCORD]', `Nuevo mensaje: ${message.guild.id}`);
+	private async OnMessage(message: discord.Message, client: discord.Client) {
+		Consola.Normal('[DISCORD]', `${message.author.username}: ${message.content}`);
 	}
 
-	private async CrearMundos()
-	{
-		let mundo:Mundo = new Mundo(this.cliente.guilds.get('693469047336992800')); //696105418065313934
-		await mundo.Generar();
+	private ObtenerMundo(guild: discord.Guild) {
+		return this.mundos.find(mundo => mundo.EsGuild(guild));
+	}
+	private async CrearMundos() {
+		this.mundos.push(new Mundo(this.cliente.guilds.get('697583698387664996')));
+		await Promise.all(this.mundos.map(mundo => mundo.Generar()));
 	}
 }
