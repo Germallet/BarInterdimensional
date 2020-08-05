@@ -1,10 +1,11 @@
 import * as discord from "discord.js";
-import { Casilla } from "./Casilla";
+import { Nodo } from "./Nodo";
 import { Consola } from "./Consola";
+import { Configuración } from './Configuración';
 
 export class Mundo {
     private readonly guild: discord.Guild;
-    private readonly casillas: Array<Casilla> = new Array<Casilla>();
+    private nodos: Array<Nodo>;
 
     public constructor(guild: discord.Guild) { this.guild = guild; }
 
@@ -23,22 +24,13 @@ export class Mundo {
 
     public async Generar() {
         await this.Limpiar();
-        const categoría: discord.ChannelResolvable = await this.guild.createChannel('Mundo', { type: 'category' });  // TODO
-        await this.GenerarCasillas(categoría);
-        Consola.Normal('[MUNDO]', 'Mundo generado!');
-    }
-    private async GenerarCasillas(categoría: discord.ChannelResolvable) {
-        for (let i = 0; i < 5; i++) this.casillas.push(new Casilla(i.toString()));
-        await Promise.all(this.casillas.map(casilla => casilla.Generar(this.guild, categoría)));
 
-        this.HacerAdyacentes(this.casillas[0], this.casillas[1]);
-        this.HacerAdyacentes(this.casillas[1], this.casillas[2]);
-        this.HacerAdyacentes(this.casillas[2], this.casillas[3]);
-        this.HacerAdyacentes(this.casillas[3], this.casillas[4]);
-    }
-    private HacerAdyacentes(casilla1: Casilla, casilla2: Casilla) {
-        casilla1.AgregarAdyacente(casilla2);
-        casilla2.AgregarAdyacente(casilla1);
+        const configuración = new Configuración('../res/servidor.xml');
+
+        const categoría: discord.ChannelResolvable = await this.guild.createChannel('Mundo', { type: 'category' });
+        this.nodos = await configuración.CrearNodos(this.guild, categoría);
+
+        Consola.Normal('[MUNDO]', 'Mundo generado!');
     }
 
     public Desconexión(cliente: discord.GuildMember) {
@@ -47,15 +39,15 @@ export class Mundo {
     public Conexión(cliente: discord.GuildMember) {
         Consola.Normal('[DISCORD]', `Se ha desnectado el usuario ${cliente.nickname} de ${cliente.voiceChannel.name}`);
     }
+
     public async TransladoDeCanal(usuario: discord.GuildMember, canalViejo: discord.VoiceChannel, canalNuevo: discord.VoiceChannel) {
-        this.ObtenerCasilaConCanal(canalViejo)?.DesonectarUsuario(usuario);
-        /*Consola.Normal('asd', 'Empezando');
-        await new Promise( resolve => setTimeout(resolve, 3000) );
-        Consola.Normal('asd', 'Terminando');*/
-        this.ObtenerCasilaConCanal(canalNuevo)?.ConectarUsuario(usuario);
+        if (this.ObtenerNodoConCanal(canalNuevo) != null) {
+            await this.ObtenerNodoConCanal(canalViejo)?.DesonectarUsuario(usuario);
+            await this.ObtenerNodoConCanal(canalNuevo)?.ConectarUsuario(usuario);
+        }
     }
 
-    private ObtenerCasilaConCanal(canal: discord.Channel) {
-        return this.casillas.find(casilla => casilla.TieneCanal(canal));
+    private ObtenerNodoConCanal(canal: discord.Channel) {
+        return this.nodos.find(nodo => nodo.TieneCanal(canal));
     }
 }

@@ -1,21 +1,22 @@
 import * as discord from "discord.js";
 
-export class Casilla {
-    private nombre: string;
-    private rol: discord.Role;
+export class Nodo {
+    private readonly nombre: string;
     private canalVoz: discord.VoiceChannel;
     private canalTexto: discord.TextChannel;
-    private adyacentes: Array<Casilla> = new Array<Casilla>();
-
+    private rol: discord.Role;
+    private readonly adyacentes: Array<Nodo> = new Array<Nodo>();
+    
     public constructor(nombre: string) { this.nombre = nombre; }
 
     public async Generar(servidor: discord.Guild, categoría: discord.ChannelResolvable) {
         await this.CrearCanales(servidor, categoría);
         await this.CrearRol(servidor);
     }
+
     private async CrearCanales(servidor: discord.Guild, categoría: discord.ChannelResolvable) {
-        this.canalTexto = await servidor.createChannel(this.nombre, { type: 'text', parent: categoría }) as discord.TextChannel; // TODO
-        this.canalVoz = await servidor.createChannel(this.nombre, { type: 'voice', parent: categoría }) as discord.VoiceChannel; // TODO
+        this.canalTexto = await servidor.createChannel(this.nombre, { type: 'text', parent: categoría }) as discord.TextChannel;
+        this.canalVoz = await servidor.createChannel(this.nombre, { type: 'voice', parent: categoría }) as discord.VoiceChannel;
     }
     private async CrearRol(servidor: discord.Guild) {
         this.rol = await servidor.createRole({
@@ -31,21 +32,21 @@ export class Casilla {
         await this.canalTexto.overwritePermissions(this.rol, this.PermisoDeCanalesEnCasilla());
     }
 
-    public AgregarAdyacente(adyacente: Casilla) {
+    public async AgregarAdyacente(adyacente: Nodo) {
         this.adyacentes.push(adyacente);
-        adyacente.EstablecerVisible(this.rol);
+        await adyacente.EstablecerVisible(this.rol);
     }
-    public EstablecerVisible(rol: discord.Role) {
-        this.canalVoz.overwritePermissions(rol, this.PermisoDeCanalesAdyacente());
+    public async EstablecerVisible(rol: discord.Role) {
+        await this.canalVoz.overwritePermissions(rol, this.PermisoDeCanalesAdyacente());
     }
-
+    
     public TieneCanal(canal: discord.Channel) { return canal?.id === this.canalVoz.id || canal?.id === this.canalTexto.id }
 
-    public ConectarUsuario(usuario: discord.GuildMember) {
-        usuario.addRole(this.rol);
+    public async ConectarUsuario(usuario: discord.GuildMember) {
+        await usuario.addRole(this.rol);
     }
-    public DesonectarUsuario(usuario: discord.GuildMember) {
-        usuario.removeRole(this.rol);
+    public async DesonectarUsuario(usuario: discord.GuildMember) {
+        await usuario.removeRole(this.rol);
     }
 
     private PermisoDeCanalesAdyacente(): discord.PermissionOverwriteOptions {
@@ -85,7 +86,6 @@ export class Casilla {
             MANAGE_EMOJIS: false
         }
     }
-
     private PermisoDeCanalesEnCasilla(): discord.PermissionOverwriteOptions {
         return {
             ADMINISTRATOR: false,

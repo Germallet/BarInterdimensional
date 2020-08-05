@@ -24,7 +24,7 @@ export class BotDiscord {
 			}
 		})
 
-		await this.cliente.login(process.env.DISCORD_BOT_TOKEN); // PROMESA
+		await this.cliente.login(process.env.DISCORD_BOT_TOKEN);
 
 		this.CrearMundos();
 	}
@@ -40,7 +40,7 @@ export class BotDiscord {
 		return this.mundos.find(mundo => mundo.EsGuild(guild));
 	}
 	private async CrearMundos() {
-		this.mundos.push(new Mundo(this.cliente.guilds.get('697583698387664996')));
+		this.mundos.push(new Mundo(this.cliente.guilds.get('740670067125125133')));
 		await Promise.all(this.mundos.map(mundo => mundo.Generar()));
 	}
 }
