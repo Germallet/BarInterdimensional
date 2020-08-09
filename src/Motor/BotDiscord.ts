@@ -17,23 +17,16 @@ export class BotDiscord {
 		});
 	
 		this.cliente.on('voiceStateUpdate', (estadoAnterior, estadoActual) => {
-			const usuario = this.ObtenerOCrearUsuario(estadoActual);
+			const canalAnterior = estadoAnterior.voiceChannel;
+			const canalActual = estadoActual.voiceChannel;
 
-			if (estadoAnterior.guild !== estadoAnterior.guild) {
-				this.ObtenerMundo(estadoAnterior.guild)?.Desconexión(estadoAnterior);
-				this.ObtenerMundo(estadoActual.guild)?.Conexión(estadoActual);
-			}
-			else {
-				const canalAnterior = estadoAnterior.voiceChannel;
-				const canalActual = estadoActual.voiceChannel;
-
-				if (canalAnterior !== canalActual)
-				{
-					const nodo = this.ObtenerNodo(canalActual);
+			if (canalAnterior !== canalActual)
+			{
+				const usuario = this.ObtenerOCrearUsuario(estadoActual);
+				const nodo = this.ObtenerNodo(canalActual);
+				if(nodo != null) 
 					usuario.MoverseA(nodo);
-					//this.ObtenerMundo(estadoAnterior.guild)?.TransladoDeCanal(estadoActual, canalAnterior, canalActual);
-				}				
-			}
+			}	
 		})
 
 		await this.cliente.login(process.env.DISCORD_BOT_TOKEN);
@@ -73,8 +66,10 @@ export class BotDiscord {
 	}
 
 	private ObtenerNodo(canal: discord.VoiceChannel) {
+		if(canal==undefined)
+			return null;
 		const mundo: Mundo = this.ObtenerMundo(canal.guild);
-        return mundo.ObtenerNodo(canal);
+        return mundo != undefined ? mundo.ObtenerNodo(canal) : null;
     }
 
 	private async CrearMundo(id: string) {

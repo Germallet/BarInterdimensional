@@ -18,18 +18,21 @@ export class Mundo {
     private async Limpiar() {
         await Promise.all
             (
-                this.guild.roles.map(rol => rol.delete().catch(excepción => Consola.Warning('[MUNDO]', `Excepción al borrar rol "${rol.name}" para limpiado de mundo "${this.guild.name}": "${excepción}"`)))
-            );
+                this.guild.roles.map(rol => {
+                    if(rol.name != "@everyone" && rol.name != "Dios")
+                        rol.delete().catch(excepción => Consola.Warning('[MUNDO]', `Excepción al borrar rol "${rol.name}" para limpiado de mundo "${this.guild.name}": "${excepción}"`));
+                }
+            ));
         await Promise.all
             (
-                this.guild.channels.map(canal => canal.delete().catch(excepción => Consola.Warning('[MUNDO]', `Excepción al borrar canal "${canal.name}" para limpiado de mundo "${this.guild.name}": "${excepción}"`)))
-            );
+                this.guild.channels.map(canal => canal.delete().catch(excepción => Consola.Warning('[MUNDO]', `Excepción al borrar canal "${canal.name}" para limpiado de mundo "${this.guild.name}": "${excepción}"`))
+            ));
     }
 
     public async Generar() {
         await this.Limpiar();
 
-        const configuración = new Configuración('../res/servidor.xml');
+        const configuración = new Configuración('../../res/servidor.xml');
 
         const categoría: discord.ChannelResolvable = await this.guild.createChannel('Mundo', { type: 'category' });
         this.nodos = await configuración.CrearNodos(this, this.guild, categoría);
@@ -43,13 +46,6 @@ export class Mundo {
         this.perfiles.push(perfil);
         usuario.AgregarPerfil(perfil);
         usuario.MoverseA(this.nodoInicial);
-    }
-
-    public Desconexión(cliente: discord.GuildMember) {
-        Consola.Normal('[DISCORD]', `Se ha conectado el usuario ${cliente.nickname} a ${cliente.voiceChannel.name}`);
-    }
-    public Conexión(cliente: discord.GuildMember) {
-        Consola.Normal('[DISCORD]', `Se ha desnectado el usuario ${cliente.nickname} de ${cliente.voiceChannel.name}`);
     }
 
     public ObtenerNodo(canal: discord.Channel) {

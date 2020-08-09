@@ -26,10 +26,11 @@ export class Configuración {
         for (let nodoXml of xmlNodos)
         {
             const nodo: Nodo = new Nodo(nodoXml.getProperty('nombre'), mundo);
-            await nodo.Generar(guild, categoría);
             nodos.push([nodoXml.getProperty('id'), nodo]);
         }
-        
+        await Promise.all(nodos.map(nodo => nodo[1].Generar(guild, categoría)));
+
+        const promesas = new Array<Promise<void>>();
         for (let nodoXml of xmlNodos)
         {
             if (nodoXml.get("adyacentes").at(0).size() == 0)
@@ -38,9 +39,10 @@ export class Configuración {
             const adyacentes: XMLList = nodoXml.get("adyacentes").at(0).get("adyacente");
 
             for (const adyacente of adyacentes)
-                await nodo.AgregarAdyacente(nodos.find(tupla => tupla[0] == adyacente.getProperty('id'))[1]);
+                promesas.push(nodo.AgregarAdyacente(nodos.find(tupla => tupla[0] == adyacente.getProperty('id'))[1]));
         }
-
+        await Promise.all(promesas);
+    
         return nodos.map(tupla => tupla[1]);
     }
 }
