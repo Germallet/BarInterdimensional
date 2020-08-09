@@ -17,16 +17,28 @@ export class Perfil {
 
     public EsDeMundo(mundo: Mundo): boolean { return this.mundo === mundo; }
 
-    public async MoverseA(miembro: discord.GuildMember, nodo: Nodo ) {
+    public async MoverseA(miembro: discord.GuildMember, nodo: Nodo) {
 
         const release = await this.mutex.acquire();
+        
+        if(this.ultimoNodo !== nodo)
+        {
+            await this.CambiarRoles(miembro, nodo);
+            this.ultimoNodo = nodo;
+        }
+        
+        release();
+    }
+
+    private async CambiarRoles(miembro: discord.GuildMember, nodo: Nodo) {
+        
+        const promesas = new Array<Promise<discord.GuildMember>>();
 
         if(this.ultimoNodo != null)
-            await miembro.removeRole(this.ultimoNodo.ObtenerRol());
+            promesas.push(miembro.removeRole(this.ultimoNodo.ObtenerRol()));
         if(nodo != null)
-            await miembro.addRole(nodo.ObtenerRol());
-        this.ultimoNodo = nodo;
-
-        release();
+            promesas.push(miembro.addRole(nodo.ObtenerRol()));
+                
+        return Promise.all(promesas);
     }
 }

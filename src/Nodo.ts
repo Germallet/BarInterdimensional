@@ -23,6 +23,7 @@ export class Nodo {
         this.canalTexto = await servidor.createChannel(this.nombre, { type: 'text', parent: categoría }) as discord.TextChannel;
         this.canalVoz = await servidor.createChannel(this.nombre, { type: 'voice', parent: categoría }) as discord.VoiceChannel;
     }
+    
     private async CrearRol(servidor: discord.Guild) {
         this.rol = await servidor.createRole({
             name: this.nombre,
