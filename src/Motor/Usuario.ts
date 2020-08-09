@@ -21,7 +21,9 @@ export class Usuario {
     public async MoverseA(nodo: Nodo) {
         const mundo: Mundo = nodo.ObtenerMundo();
         const perfil: Perfil = this.ObtenerPerfil(mundo);
-
-        perfil.MoverseA(this.miembro, nodo);
+        perfil.MoverseA(nodo);
     }
+
+    public async AgregarRol(rol: discord.Role) { this.miembro.addRole(rol); }
+    public async RemoverRol(rol: discord.Role) { this.miembro.removeRole(rol); }
 }

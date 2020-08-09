@@ -19,7 +19,7 @@ export class Mundo {
         await Promise.all
             (
                 this.guild.roles.map(rol => {
-                    if(rol.name != "@everyone" && rol.name != "Dios")
+                    if (rol.name != "@everyone" && rol.name != "Dios")
                         rol.delete().catch(excepción => Consola.Warning('[MUNDO]', `Excepción al borrar rol "${rol.name}" para limpiado de mundo "${this.guild.name}": "${excepción}"`));
                 }
             ));

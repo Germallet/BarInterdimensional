@@ -1,6 +1,6 @@
-import { BotDiscord } from './Motor/BotDiscord';
+import { Dios } from './Motor/Dios';
 import { Consola } from './Motor/Consola';
 
 Consola.Normal('[INICIO]', "Iniciando");
-const botDiscord = new BotDiscord();
-botDiscord.Conectarse();
+const dios = new Dios();
+dios.Conectarse(process.env.DISCORD_BOT_TOKEN);
