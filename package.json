@@ -16,7 +16,9 @@
 		"typescript": "^3.8.3"
 	},
 	"dependencies": {
+		"@prisma/client": "^2.4.1",
 		"@types/node": "^13.11.0",
+		"async-mutex": "^0.2.4",
 		"discord.js": "^11.6.4",
 		"sxml": "^1.0.4"
 	},

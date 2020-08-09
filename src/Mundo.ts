@@ -1,11 +1,15 @@
 import * as discord from "discord.js";
 import { Nodo } from "./Nodo";
+import { Perfil } from "./Perfil";
 import { Consola } from "./Consola";
+import { Usuario } from "./Usuario";
 import { Configuración } from './Configuración';
 
 export class Mundo {
     private readonly guild: discord.Guild;
     private nodos: Array<Nodo>;
+    private readonly perfiles: Array<Perfil> = new Array<Perfil>();
+    private nodoInicial: Nodo;
 
     public constructor(guild: discord.Guild) { this.guild = guild; }
 
@@ -28,9 +32,17 @@ export class Mundo {
         const configuración = new Configuración('../res/servidor.xml');
 
         const categoría: discord.ChannelResolvable = await this.guild.createChannel('Mundo', { type: 'category' });
-        this.nodos = await configuración.CrearNodos(this.guild, categoría);
+        this.nodos = await configuración.CrearNodos(this, this.guild, categoría);
+        this.nodoInicial = this.nodos[0];
 
         Consola.Normal('[MUNDO]', 'Mundo generado!');
+    }
+
+    public async CrearPerfil(usuario: Usuario) {
+        const perfil: Perfil = new Perfil(usuario, this);
+        this.perfiles.push(perfil);
+        usuario.AgregarPerfil(perfil);
+        usuario.MoverseA(this.nodoInicial);
     }
 
     public Desconexión(cliente: discord.GuildMember) {
@@ -40,14 +52,11 @@ export class Mundo {
         Consola.Normal('[DISCORD]', `Se ha desnectado el usuario ${cliente.nickname} de ${cliente.voiceChannel.name}`);
     }
 
-    public async TransladoDeCanal(usuario: discord.GuildMember, canalViejo: discord.VoiceChannel, canalNuevo: discord.VoiceChannel) {
-        if (this.ObtenerNodoConCanal(canalNuevo) != null) {
-            await this.ObtenerNodoConCanal(canalViejo)?.DesonectarUsuario(usuario);
-            await this.ObtenerNodoConCanal(canalNuevo)?.ConectarUsuario(usuario);
-        }
+    public ObtenerNodo(canal: discord.Channel) {
+        return this.nodos.find(nodo => nodo.TieneCanal(canal));
     }
 
-    private ObtenerNodoConCanal(canal: discord.Channel) {
-        return this.nodos.find(nodo => nodo.TieneCanal(canal));
+    public TieneRol(rol: discord.Role): boolean {
+        return this.nodos.some(nodo => nodo.TieneRol(rol));
     }
 }

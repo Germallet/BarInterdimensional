@@ -1,2 +1,2 @@
 npx prisma introspect
-npx prsima generate
+npx prisma generate

@@ -1,13 +1,18 @@
 import * as discord from "discord.js";
+import { Mundo } from "./Mundo";
 
 export class Nodo {
     private readonly nombre: string;
+    private readonly mundo: Mundo;
     private canalVoz: discord.VoiceChannel;
     private canalTexto: discord.TextChannel;
     private rol: discord.Role;
     private readonly adyacentes: Array<Nodo> = new Array<Nodo>();
     
-    public constructor(nombre: string) { this.nombre = nombre; }
+    public constructor(nombre: string, mundo: Mundo) { 
+        this.nombre = nombre;
+        this.mundo = mundo;
+    }
 
     public async Generar(servidor: discord.Guild, categoría: discord.ChannelResolvable) {
         await this.CrearCanales(servidor, categoría);
@@ -26,7 +31,7 @@ export class Nodo {
             //position?: number;
             permissions: 0,
             mentionable: false
-        });  // TODO
+        })
 
         await this.canalVoz.overwritePermissions(this.rol, this.PermisoDeCanalesEnCasilla());
         await this.canalTexto.overwritePermissions(this.rol, this.PermisoDeCanalesEnCasilla());
@@ -40,14 +45,15 @@ export class Nodo {
         await this.canalVoz.overwritePermissions(rol, this.PermisoDeCanalesAdyacente());
     }
     
-    public TieneCanal(canal: discord.Channel) { return canal?.id === this.canalVoz.id || canal?.id === this.canalTexto.id }
+    public TieneCanal(canal: discord.Channel) { return canal?.id === this.canalVoz.id || canal?.id === this.canalTexto.id; }
 
-    public async ConectarUsuario(usuario: discord.GuildMember) {
-        await usuario.addRole(this.rol);
-    }
-    public async DesonectarUsuario(usuario: discord.GuildMember) {
-        await usuario.removeRole(this.rol);
-    }
+    public TieneRol(rol: discord.Role) { return rol?.id === this.rol.id; }
+
+    public ObtenerRol(): discord.Role { return this.rol; }
+
+    public ObtenerAdyacentes(): Array<Nodo> { return this.adyacentes; }
+
+    public ObtenerMundo(): Mundo { return this.mundo; } 
 
     private PermisoDeCanalesAdyacente(): discord.PermissionOverwriteOptions {
         return {
@@ -84,7 +90,7 @@ export class Nodo {
             MANAGE_ROLES_OR_PERMISSIONS: false,
             MANAGE_WEBHOOKS: false,
             MANAGE_EMOJIS: false
-        }
+        };
     }
     private PermisoDeCanalesEnCasilla(): discord.PermissionOverwriteOptions {
         return {
@@ -121,6 +127,6 @@ export class Nodo {
             MANAGE_ROLES_OR_PERMISSIONS: false,
             MANAGE_WEBHOOKS: false,
             MANAGE_EMOJIS: false
-        }
+        };
     }
 }
