@@ -1,8 +1,7 @@
 import * as discord from "discord.js";
 import { Mundo } from "./Mundo";
 import { Nodo } from "./Nodo";
-import fs from 'fs'
-import path from 'path'
+import { ArchivoLocal } from "./ArchivoLocal";
 import sxml = require("sxml");
 import XML = sxml.XML;
 import XMLList = sxml.XMLList;
@@ -11,13 +10,10 @@ export class Configuración {
     private readonly xml: XML;
     private nodos: Array<Nodo> = new Array<Nodo>();
 
-    public constructor(dirección: string) {
-        const datos: string = this.CargarArchivo(dirección);
-        this.xml = new XML(datos);
+    public constructor(contenido: string) {
+        this.xml = new XML(contenido);
     }
-    private CargarArchivo(dirección: string): string {
-        return fs.readFileSync(path.resolve(__dirname, dirección), 'utf8');
-    }
+    
     public async CrearNodos(mundo: Mundo, guild: discord.Guild, categoría: discord.ChannelResolvable): Promise<Array<Nodo>>
     {
         const xmlNodos: XMLList = this.xml.get("nodos").at(0).get("nodo");

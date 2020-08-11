@@ -4,6 +4,7 @@ import { Perfil } from "./Perfil";
 import { Consola } from "./Consola";
 import { Usuario } from "./Usuario";
 import { Configuración } from './Configuración';
+import { Universo } from "./Universo";
 
 export class Mundo {
     private readonly guild: discord.Guild;
@@ -29,15 +30,13 @@ export class Mundo {
             ));
     }
 
-    public async Generar() {
+    public async Generar(configuración: Configuración) {
         await this.Limpiar();
-
-        const configuración = new Configuración('../../res/servidor.xml');
-
         const categoría: discord.ChannelResolvable = await this.guild.createChannel('Mundo', { type: 'category' });
         this.nodos = await configuración.CrearNodos(this, this.guild, categoría);
         this.nodoInicial = this.nodos[0];
-
+        
+        await Promise.all(this.guild.members.map(miembro => this.CrearPerfil(Universo.Usuarios().ObtenerOCrearUsuario(miembro))));
         Consola.Normal('[MUNDO]', 'Mundo generado!');
     }
 

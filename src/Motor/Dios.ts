@@ -4,6 +4,8 @@ import { Mundo } from "./Mundo";
 import { Consola } from "./Consola";
 import { BotDiscord } from "./BotDiscord";
 import { Universo } from "./Universo";
+import { ArchivoWeb } from "./ArchivoWeb";
+import { Configuración } from "./Configuración";
 
 export class Dios extends BotDiscord {
 	private readonly usuarios: Array<Usuario> = new Array<Usuario>();
@@ -40,7 +42,16 @@ export class Dios extends BotDiscord {
 		}	
 	}
 
-	private async MensajeRecibido(message: discord.Message, client: discord.Client) {
-		Consola.Normal('[DISCORD]', `${message.author.username}: ${message.content}`);
+	private async MensajeRecibido(mensaje: discord.Message, cliente: discord.Client) {
+		Consola.Normal('[DISCORD]', `${mensaje.author.username}: ${mensaje.content}`);
+
+		if (mensaje.content == '-CrearMundo' && mensaje.attachments.size == 1) {
+			const adjunto: discord.MessageAttachment = mensaje.attachments.first();
+
+			const contenidoArchivo: string = await new ArchivoWeb().Leer(adjunto.url);
+			const configuración: Configuración = new Configuración(contenidoArchivo);
+
+			Universo.Mundos().ObtenerMundo(mensaje.guild).Generar(configuración);
+		}
 	}
 }

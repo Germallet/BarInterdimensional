@@ -7,8 +7,8 @@ export class GestorDeMundos {
 
     public async CrearMundo(guild: discord.Guild) {
         const mundo: Mundo = new Mundo(guild);
-        await mundo.Generar();
-        await Promise.all(guild.members.map(miembro => mundo.CrearPerfil(Universo.Usuarios().ObtenerOCrearUsuario(miembro))));
+        //await mundo.Generar();
+        //await Promise.all(guild.members.map(miembro => mundo.CrearPerfil(Universo.Usuarios().ObtenerOCrearUsuario(miembro))));
         this.mundos.push(mundo);
     }
 
