@@ -9,29 +9,26 @@ export class Dios extends BotDiscord {
 	private readonly usuarios: Array<Usuario> = new Array<Usuario>();
 
 	protected EstablecerEventos() {
-        this.cliente.on('ready', this.OnReady);
-		this.cliente.on('message', this.OnMessage);
+		this.EstablecerEvento('message', this.OnMessage);
+		this.EstablecerEvento('guildMemberAdd', this.NuevoPerfil);		
+		this.EstablecerEvento('voiceStateUpdate', this.CambioDeEstadoDeVoz);
+	}
 
-		this.cliente.on('guildMemberAdd', miembro => {
-			this.CrearPerfil(miembro, this.ObtenerMundo(miembro.guild));
-		});
-	
-		this.cliente.on('voiceStateUpdate', (estadoAnterior, estadoActual) => {
-			const canalAnterior = estadoAnterior.voiceChannel;
-			const canalActual = estadoActual.voiceChannel;
+	private NuevoPerfil(miembro: discord.GuildMember) {
+		this.CrearPerfil(miembro, this.ObtenerMundo(miembro.guild));
+	}
+	private CambioDeEstadoDeVoz(estadoAnterior: discord.GuildMember, estadoActual: discord.GuildMember) {
+		const canalAnterior = estadoAnterior.voiceChannel;
+		const canalActual = estadoActual.voiceChannel;
 
-			if (canalAnterior !== canalActual)
-			{
-				const usuario = this.ObtenerOCrearUsuario(estadoActual);
-				const nodo = this.ObtenerNodo(canalActual);
-				if(nodo != null) 
-					usuario.MoverseA(nodo);
-			}	
-		})
-    }
-	protected AlConcectarse() {
-        this.CrearMundos();
-    }
+		if (canalAnterior !== canalActual)
+		{
+			const usuario = this.ObtenerOCrearUsuario(estadoActual);
+			const nodo = this.ObtenerNodo(canalActual);
+			if(nodo != null) 
+				usuario.MoverseA(nodo);
+		}	
+	}
 
 	private TieneUsuario(miembro: discord.GuildMember) {
 		return this.usuarios.some(usuario => usuario.esMiembro(miembro));
@@ -53,8 +50,9 @@ export class Dios extends BotDiscord {
 		return this.usuarios.find(usuario => usuario.esMiembro(miembro));
 	}
 
-	private OnReady() {
+	protected Conectado() {
 		Consola.Normal('[DISCORD]', 'Conectado!');
+		this.CrearMundos();
 	}
 	private async OnMessage(message: discord.Message, client: discord.Client) {
 		Consola.Normal('[DISCORD]', `${message.author.username}: ${message.content}`);
@@ -72,16 +70,12 @@ export class Dios extends BotDiscord {
     }
 
 	private async CrearMundo(id: string) {
-		const guild: discord.Guild = this.cliente.guilds.get(id);
+		const guild: discord.Guild = await this.ObtenerGuild(id);
 		const mundo: Mundo = new Mundo(guild);
 		await mundo.Generar();
 		await Promise.all(guild.members.map(miembro => this.CrearPerfil(miembro, mundo)));
 		this.mundos.push(mundo);
 	}
-
-	public async ObtenerGuild(): Promise<discord.Guild> {
-		return this.cliente.guilds.get('740670067125125133');
-    }
 
 	private async CrearMundos() {
 		await this.CrearMundo('740670067125125133');
