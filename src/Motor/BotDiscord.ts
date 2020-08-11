@@ -4,9 +4,9 @@ export abstract class BotDiscord {
 	private readonly cliente: discord.Client = new discord.Client();
 
 	public async Conectarse(token: string) {
-        this.EstablecerEvento('ready', this.Conectado);
 		this.EstablecerEventos();
 		await this.cliente.login(token);
+		this.Conectado();
 	}
 
 	protected EstablecerEvento(event: string, listener: any) {
