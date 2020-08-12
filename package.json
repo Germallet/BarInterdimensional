@@ -15,12 +15,14 @@
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
+		"@prisma/cli": "^2.4.1",
 		"nodemon": "^2.0.4",
 		"tslint": "^5.20.1",
 		"typescript": "^3.9.7"
 	},
 	"dependencies": {
 		"@discordjs/uws": "^10.149.0",
+		"@prisma/client": "^2.4.1",
 		"@types/node": "^13.13.15",
 		"async-mutex": "^0.2.4",
 		"discord.js": "^11.6.4",
