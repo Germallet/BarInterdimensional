@@ -8,8 +8,7 @@ import { ArchivoWeb } from "./ArchivoWeb";
 import { Configuración } from "./Configuración";
 
 export class Dios extends BotDiscord {
-	private readonly usuarios: Array<Usuario> = new Array<Usuario>();
-
+	
 	protected EstablecerEventos() {
 		this.EstablecerEvento('guildMemberAdd', this.CrearPerfil);
 		this.EstablecerEvento('voiceStateUpdate', this.CambioDeEstadoDeVoz);
