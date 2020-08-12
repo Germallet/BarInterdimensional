@@ -1,9 +1,22 @@
 import * as discord from "discord.js";
+import * as BD from "@prisma/client"
 import { Mundo } from "./Mundo";
 import { Universo } from "./Universo";
+import { Consola } from "./Consola";
 
 export class GestorDeMundos {
 	private readonly mundos: Array<Mundo> = new Array<Mundo>();
+
+    public async CargarMundos() {
+        const listaMundosBD: BD.mundo[] = await Universo.BaseDeDatos().ObtenerMundos();
+        await Promise.all(listaMundosBD.map(mundoBD => this.CargarMundo(mundoBD.guild.toString())));
+    }
+
+    public async CargarMundo(id: string) {
+        const mundo: Mundo = new Mundo(await Universo.Dios().ObtenerGuild(id));
+        this.mundos.push(mundo);
+        Consola.Normal('[MUNDOS]', `Mundo cargado (id: ${id})`);
+    }
 
     public async CrearMundo(guild: discord.Guild) {
         const mundo: Mundo = new Mundo(guild);

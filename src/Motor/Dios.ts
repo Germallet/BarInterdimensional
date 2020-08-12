@@ -2,24 +2,29 @@ import * as discord from "discord.js";
 import { Usuario } from "./Usuario";
 import { Mundo } from "./Mundo";
 import { Consola } from "./Consola";
-import { BotDiscord } from "./BotDiscord";
+import { ClienteDiscord } from "./ClienteDiscord";
 import { Universo } from "./Universo";
 import { ArchivoWeb } from "./ArchivoWeb";
 import { Configuración } from "./Configuración";
 
-export class Dios extends BotDiscord {
-	
-	protected EstablecerEventos() {
-		this.EstablecerEvento('guildMemberAdd', this.CrearPerfil);
-		this.EstablecerEvento('voiceStateUpdate', this.CambioDeEstadoDeVoz);
-		this.EstablecerEvento('message', this.MensajeRecibido);
+export class Dios {
+	private readonly cliente: ClienteDiscord = new ClienteDiscord();
+
+	public async Conectarse() {
+		this.EstablecerEventos();
+		await this.cliente.Conectarse(process.env.DISCORD_BOT_TOKEN);
+		this.Conectado();
+	}
+
+	private EstablecerEventos() {
+		this.cliente.EstablecerEvento('guildMemberAdd', this.CrearPerfil);
+		this.cliente.EstablecerEvento('voiceStateUpdate', this.CambioDeEstadoDeVoz);
+		this.cliente.EstablecerEvento('message', this.MensajeRecibido);
 	}
 
 	protected async Conectado() {
 		Consola.Normal('[DISCORD]', 'Conectado!');
-
-		const guild: discord.Guild = await super.ObtenerGuild('740670067125125133');
-        await Universo.Mundos().CrearMundo(guild);
+        await Universo.Mundos().CargarMundos();
 	}
 
 	private async CrearPerfil(miembro: discord.GuildMember) {
@@ -52,5 +57,9 @@ export class Dios extends BotDiscord {
 
 			Universo.Mundos().ObtenerMundo(mensaje.guild).Generar(configuración);
 		}
+	}
+
+	public async ObtenerGuild(id: string): Promise<discord.Guild> {
+		return this.cliente.ObtenerGuild(id);
 	}
 }
