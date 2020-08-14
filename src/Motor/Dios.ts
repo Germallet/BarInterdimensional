@@ -40,7 +40,7 @@ export class Dios {
 		if (canalAnterior !== canalActual)
 		{
 			const usuario = Universo.Usuarios().ObtenerOCrearUsuario(estadoActual);
-			const nodo = Universo.Mundos().ObtenerNodo(canalActual);
+			const nodo = canalActual != undefined ? Universo.Mundos().ObtenerNodo(canalActual.guild.id, canalActual.id) : null;
 			if(nodo != null) 
 				usuario.MoverseA(nodo);
 		}	

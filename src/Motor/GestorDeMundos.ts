@@ -1,4 +1,3 @@
-import * as discord from "discord.js";
 import { ServidorDiscord } from "./DiscordAPI/ServidorDiscord";
 import * as BD from "@prisma/client"
 import { Mundo } from "./Mundo";
@@ -23,10 +22,8 @@ export class GestorDeMundos {
         return this.mundos.find(mundo => mundo.EsServidor(id));
     }
 
-    public ObtenerNodo(canal: discord.VoiceChannel) {
-        if(canal==undefined)
-            return null;
-        const mundo: Mundo = this.ObtenerMundo(canal.guild.id);
-        return mundo != undefined ? mundo.ObtenerNodo(canal) : null;
+    public ObtenerNodo(idMundo: string, idCanal: string) {
+        const mundo: Mundo = this.ObtenerMundo(idMundo);
+        return mundo != undefined ? mundo.ObtenerNodo(idCanal) : null;
     }
 }

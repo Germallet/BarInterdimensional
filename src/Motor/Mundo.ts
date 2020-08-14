@@ -1,4 +1,3 @@
-import * as discord from "discord.js";
 import { ServidorDiscord } from "./DiscordAPI/ServidorDiscord";
 import { CategoríaDiscord } from "./DiscordAPI/CategoríaDiscord";
 import { Nodo } from "./Nodo";
@@ -41,9 +40,5 @@ export class Mundo {
 
     public ObtenerNodo(id: string) {
         return this.nodos.find(nodo => nodo.TieneCanal(id));
-    }
-
-    public TieneRol(rol: discord.Role): boolean {
-        return this.nodos.some(nodo => nodo.TieneRol(rol));
     }
 }
