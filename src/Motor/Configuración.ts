@@ -1,7 +1,7 @@
-import * as discord from "discord.js";
+import { ServidorDiscord } from "./DiscordAPI/ServidorDiscord";
+import { CategoríaDiscord } from "./DiscordAPI/CategoríaDiscord";
 import { Mundo } from "./Mundo";
 import { Nodo } from "./Nodo";
-import { ArchivoLocal } from "./ArchivoLocal";
 import sxml = require("sxml");
 import XML = sxml.XML;
 import XMLList = sxml.XMLList;
@@ -14,7 +14,7 @@ export class Configuración {
         this.xml = new XML(contenido);
     }
     
-    public async CrearNodos(mundo: Mundo, guild: discord.Guild, categoría: discord.ChannelResolvable): Promise<Array<Nodo>>
+    public async CrearNodos(mundo: Mundo, servidor: ServidorDiscord, categoría: CategoríaDiscord): Promise<Array<Nodo>>
     {
         const xmlNodos: XMLList = this.xml.get("nodos").at(0).get("nodo");
         const nodos: Array<[string, Nodo]> = new Array<[string, Nodo]>();
@@ -24,7 +24,7 @@ export class Configuración {
             const nodo: Nodo = new Nodo(nodoXml.getProperty('nombre'), mundo);
             nodos.push([nodoXml.getProperty('id'), nodo]);
         }
-        await Promise.all(nodos.map(nodo => nodo[1].Generar(guild, categoría)));
+        await Promise.all(nodos.map(nodo => nodo[1].Generar(servidor, categoría)));
 
         const promesas = new Array<Promise<void>>();
         for (let nodoXml of xmlNodos)

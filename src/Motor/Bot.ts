@@ -1,4 +1,4 @@
-import { ClienteDiscord } from "./ClienteDiscord";
+import { ClienteDiscord } from "./DiscordAPI/ClienteDiscord";
 
 export abstract class Bot {
 	private readonly cliente: ClienteDiscord = new ClienteDiscord();

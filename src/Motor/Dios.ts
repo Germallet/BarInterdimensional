@@ -2,7 +2,7 @@ import * as discord from "discord.js";
 import { Usuario } from "./Usuario";
 import { Mundo } from "./Mundo";
 import { Consola } from "./Consola";
-import { ClienteDiscord } from "./ClienteDiscord";
+import { ClienteDiscord } from "./DiscordAPI/ClienteDiscord";
 import { Universo } from "./Universo";
 import { ArchivoWeb } from "./ArchivoWeb";
 import { Configuración } from "./Configuración";
@@ -28,7 +28,7 @@ export class Dios {
 	}
 
 	private async CrearPerfil(miembro: discord.GuildMember) {
-		const mundo: Mundo = Universo.Mundos().ObtenerMundo(miembro.guild);
+		const mundo: Mundo = Universo.Mundos().ObtenerMundo(miembro.guild.id);
 		const usuario: Usuario = Universo.Usuarios().ObtenerOCrearUsuario(miembro);
 		await mundo.CrearPerfil(usuario);
 	}
@@ -49,13 +49,13 @@ export class Dios {
 	private async MensajeRecibido(mensaje: discord.Message, cliente: discord.Client) {
 		Consola.Normal('[DISCORD]', `${mensaje.author.username}: ${mensaje.content}`);
 
-		if (mensaje.content == '-CrearMundo' && mensaje.attachments.size == 1) {
+		if (mensaje.content == '--Generar' && mensaje.attachments.size == 1) {
 			const adjunto: discord.MessageAttachment = mensaje.attachments.first();
 
 			const contenidoArchivo: string = await new ArchivoWeb().Leer(adjunto.url);
 			const configuración: Configuración = new Configuración(contenidoArchivo);
 
-			Universo.Mundos().ObtenerMundo(mensaje.guild).Generar(configuración);
+			Universo.Mundos().ObtenerMundo(mensaje.guild.id).Generar(configuración);
 		}
 	}
 

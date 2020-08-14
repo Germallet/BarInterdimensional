@@ -1,4 +1,6 @@
 import * as discord from "discord.js";
+import { ServidorDiscord } from "./DiscordAPI/ServidorDiscord";
+import { CategoríaDiscord } from "./DiscordAPI/CategoríaDiscord";
 import { Nodo } from "./Nodo";
 import { Perfil } from "./Perfil";
 import { Consola } from "./Consola";
@@ -7,36 +9,22 @@ import { Configuración } from './Configuración';
 import { Universo } from "./Universo";
 
 export class Mundo {
-    private readonly guild: discord.Guild;
+    private readonly servidor: ServidorDiscord;
     private nodos: Array<Nodo>;
     private readonly perfiles: Array<Perfil> = new Array<Perfil>();
     private nodoInicial: Nodo;
 
-    public constructor(guild: discord.Guild) { this.guild = guild; }
+    public constructor(servidor: ServidorDiscord) { this.servidor = servidor; }
 
-    public EsGuild(guild: discord.Guild) { return this.guild.id === guild.id; }
-
-    private async Limpiar() {
-        await Promise.all
-            (
-                this.guild.roles.map(rol => {
-                    if (rol.name != "@everyone" && rol.name != "Dios")
-                        rol.delete().catch(excepción => Consola.Warning('[MUNDO]', `Excepción al borrar rol "${rol.name}" para limpiado de mundo "${this.guild.name}": "${excepción}"`));
-                }
-            ));
-        await Promise.all
-            (
-                this.guild.channels.map(canal => canal.delete().catch(excepción => Consola.Warning('[MUNDO]', `Excepción al borrar canal "${canal.name}" para limpiado de mundo "${this.guild.name}": "${excepción}"`))
-            ));
-    }
+    public EsServidor(id: string) { return this.servidor.TieneId(id) }
 
     public async Generar(configuración: Configuración) {
-        await this.Limpiar();
-        const categoría: discord.ChannelResolvable = await this.guild.createChannel('Mundo', { type: 'category' });
-        this.nodos = await configuración.CrearNodos(this, this.guild, categoría);
+        await this.servidor.Limpiar();
+        const categoría: CategoríaDiscord = await this.servidor.CrearCategoría('Mundo');
+        this.nodos = await configuración.CrearNodos(this, this.servidor, categoría);
         this.nodoInicial = this.nodos[0];
         
-        await Promise.all(this.guild.members.map(miembro => this.CrearPerfil(Universo.Usuarios().ObtenerOCrearUsuario(miembro))));
+        await Promise.all(this.servidor.ObtenerMiembros().map(miembro => this.CrearPerfil(Universo.Usuarios().ObtenerOCrearUsuario(miembro))));
         Consola.Normal('[MUNDO]', 'Mundo generado!');
     }
 
@@ -45,6 +33,10 @@ export class Mundo {
         this.perfiles.push(perfil);
         usuario.AgregarPerfil(perfil);
         usuario.MoverseA(this.nodoInicial);
+    }
+
+    public ObtenerNombre(): string {
+        return this.servidor.ObtenerNombre();
     }
 
     public ObtenerNodo(canal: discord.Channel) {

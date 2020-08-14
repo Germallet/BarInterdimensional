@@ -8,5 +8,5 @@ datasource db {
 }
 
 model mundo {
-  guild Float @id
+  id String @id
 }

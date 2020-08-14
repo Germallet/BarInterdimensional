@@ -1,4 +1,6 @@
 import * as discord from "discord.js";
+import { ServidorDiscord } from "./DiscordAPI/ServidorDiscord";
+import { CategoríaDiscord } from "./DiscordAPI/CategoríaDiscord";
 import { Mundo } from "./Mundo";
 
 export class Nodo {
@@ -14,18 +16,18 @@ export class Nodo {
         this.mundo = mundo;
     }
 
-    public async Generar(servidor: discord.Guild, categoría: discord.ChannelResolvable) {
+    public async Generar(servidor: ServidorDiscord, categoría: CategoríaDiscord) {
         await this.CrearCanales(servidor, categoría);
         await this.CrearRol(servidor);
     }
 
-    private async CrearCanales(servidor: discord.Guild, categoría: discord.ChannelResolvable) {
-        this.canalTexto = await servidor.createChannel(this.nombre, { type: 'text', parent: categoría }) as discord.TextChannel;
-        this.canalVoz = await servidor.createChannel(this.nombre, { type: 'voice', parent: categoría }) as discord.VoiceChannel;
+    private async CrearCanales(servidor: ServidorDiscord, categoría: CategoríaDiscord) {
+        this.canalTexto = await servidor.CrearCanalDeTexto(this.nombre, categoría);
+        this.canalVoz = await servidor.CrearCanalDeVoz(this.nombre, categoría);
     }
     
-    private async CrearRol(servidor: discord.Guild) {
-        this.rol = await servidor.createRole({
+    private async CrearRol(servidor: ServidorDiscord) {
+        this.rol = await servidor.CrearRol({
             name: this.nombre,
             color: 'WHITE',
             hoist: false,
