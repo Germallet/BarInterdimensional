@@ -1,13 +1,16 @@
 import * as discord from "discord.js";
 import { ServidorDiscord } from "./DiscordAPI/ServidorDiscord";
-import { CategoríaDiscord } from "./DiscordAPI/CategoríaDiscord";
 import { Mundo } from "./Mundo";
+import { PermisosDeCanal } from "./DiscordAPI/CanalDiscord";
+import { CategoríaDiscord } from "./DiscordAPI/CategoríaDiscord";
+import { CanalDeVozDiscord } from "./DiscordAPI/CanalDeVozDiscord";
+import { CanalDeTextoDiscord } from "./DiscordAPI/CanalDeTextoDiscord";
 
 export class Nodo {
     private readonly nombre: string;
     private readonly mundo: Mundo;
-    private canalVoz: discord.VoiceChannel;
-    private canalTexto: discord.TextChannel;
+    private canalVoz: CanalDeVozDiscord;
+    private canalTexto: CanalDeTextoDiscord;
     private rol: discord.Role;
     private readonly adyacentes: Array<Nodo> = new Array<Nodo>();
     
@@ -36,8 +39,8 @@ export class Nodo {
             mentionable: false
         })
 
-        await this.canalVoz.overwritePermissions(this.rol, this.PermisoDeCanalesEnCasilla());
-        await this.canalTexto.overwritePermissions(this.rol, this.PermisoDeCanalesEnCasilla());
+        await this.canalVoz.CambiarPermisos(this.rol, this.PermisoDeCanalesPropios());
+        await this.canalTexto.CambiarPermisos(this.rol, this.PermisoDeCanalesPropios());
     }
 
     public async AgregarAdyacente(adyacente: Nodo) {
@@ -45,10 +48,10 @@ export class Nodo {
         await adyacente.EstablecerVisible(this.rol);
     }
     public async EstablecerVisible(rol: discord.Role) {
-        await this.canalVoz.overwritePermissions(rol, this.PermisoDeCanalesAdyacente());
-    }
+        await this.canalVoz.CambiarPermisos(rol, this.PermisoDeCanalesAdyacente());
+    }      
     
-    public TieneCanal(canal: discord.Channel) { return canal?.id === this.canalVoz.id || canal?.id === this.canalTexto.id; }
+    public TieneCanal(id: string) { return this.canalVoz.TieneId(id) || this.canalTexto.TieneId(id); }
 
     public TieneRol(rol: discord.Role) { return rol?.id === this.rol.id; }
 
@@ -58,7 +61,7 @@ export class Nodo {
 
     public ObtenerMundo(): Mundo { return this.mundo; } 
 
-    private PermisoDeCanalesAdyacente(): discord.PermissionOverwriteOptions {
+    private PermisoDeCanalesAdyacente(): PermisosDeCanal {
         return {
             ADMINISTRATOR: false,
             CREATE_INSTANT_INVITE: false,
@@ -95,7 +98,8 @@ export class Nodo {
             MANAGE_EMOJIS: false
         };
     }
-    private PermisoDeCanalesEnCasilla(): discord.PermissionOverwriteOptions {
+
+    private PermisoDeCanalesPropios(): PermisosDeCanal {
         return {
             ADMINISTRATOR: false,
             CREATE_INSTANT_INVITE: false,

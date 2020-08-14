@@ -37,12 +37,12 @@ export class ServidorDiscord {
         return this.CrearCanal(nombre, 'category', (canal) => new CategoríaDiscord(canal as discord.CategoryChannel)) as Promise<CategoríaDiscord>;
     }
 
-    public async CrearCanalDeTexto(nombre: string, categoría: CategoríaDiscord): Promise<discord.TextChannel> {
-        return this.CrearCanal(nombre, 'text', (canal) => new CanalDeTextoDiscord(canal as discord.TextChannel)) as Promise<discord.TextChannel>;
+    public async CrearCanalDeTexto(nombre: string, categoría: CategoríaDiscord): Promise<CanalDeTextoDiscord> {
+        return this.CrearCanal(nombre, 'text', (canal) => new CanalDeTextoDiscord(canal as discord.TextChannel)) as Promise<CanalDeTextoDiscord>;
     }
 
-    public async CrearCanalDeVoz(nombre: string, categoría: CategoríaDiscord): Promise<discord.VoiceChannel> {
-        return this.CrearCanal(nombre, 'voice', (canal) => new CanalDeVozDiscord(canal as discord.VoiceChannel)) as Promise<discord.VoiceChannel>;
+    public async CrearCanalDeVoz(nombre: string, categoría: CategoríaDiscord): Promise<CanalDeVozDiscord> {
+        return this.CrearCanal(nombre, 'voice', (canal) => new CanalDeVozDiscord(canal as discord.VoiceChannel)) as Promise<CanalDeVozDiscord>;
     }
     
     public async CrearRol(datos: discord.RoleData) {

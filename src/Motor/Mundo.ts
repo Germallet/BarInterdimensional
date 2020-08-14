@@ -39,8 +39,8 @@ export class Mundo {
         return this.servidor.ObtenerNombre();
     }
 
-    public ObtenerNodo(canal: discord.Channel) {
-        return this.nodos.find(nodo => nodo.TieneCanal(canal));
+    public ObtenerNodo(id: string) {
+        return this.nodos.find(nodo => nodo.TieneCanal(id));
     }
 
     public TieneRol(rol: discord.Role): boolean {

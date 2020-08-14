@@ -8,4 +8,8 @@ export class CategoríaDiscord {
     public Obtener(): discord.CategoryChannel {
         return this.categoría;
     }
+
+    public TieneId(id: string): boolean {
+        return this.categoría.id === id;
+    }
 }
