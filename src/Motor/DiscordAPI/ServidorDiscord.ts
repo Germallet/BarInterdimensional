@@ -3,7 +3,9 @@ import { CategoríaDiscord } from "./CategoríaDiscord";
 import { CanalDeVozDiscord } from "./CanalDeVozDiscord";
 import { CanalDeTextoDiscord } from "./CanalDeTextoDiscord";
 import { CanalDiscord } from "./CanalDiscord";
+import { RolDiscord } from "./RolDiscord";
 import { Consola } from "../Consola";
+import { ClienteDiscord } from "./ClienteDiscord";
 
 export class ServidorDiscord {
     private readonly servidor: discord.Guild;
@@ -14,8 +16,8 @@ export class ServidorDiscord {
         return this.servidor.name;
     }
 
-    public ObtenerMiembros(): discord.GuildMember[] {
-        return this.servidor.members.array();
+    public ObtenerClientes(): ClienteDiscord[] {
+        return this.servidor.members.array().map(guildmember => new ClienteDiscord(guildmember));
     }
 
     public TieneId(id: string): boolean {
@@ -45,8 +47,15 @@ export class ServidorDiscord {
         return this.CrearCanal(nombre, 'voice', (canal) => new CanalDeVozDiscord(canal as discord.VoiceChannel)) as Promise<CanalDeVozDiscord>;
     }
     
-    public async CrearRol(datos: discord.RoleData) {
-        return this.servidor.createRole(datos);
+    public async CrearRol(datos: discord.RoleData): Promise<RolDiscord> {
+        const copiaServidor: discord.Guild = this.servidor;
+        return new Promise(function(resolver, rechazar) {
+            copiaServidor.createRole(datos).then(
+                function(resultado: discord.Role) {
+                    resolver(new RolDiscord(resultado));
+                }, rechazar
+            );
+        });
     }
 
     private async BorrarCanales() {

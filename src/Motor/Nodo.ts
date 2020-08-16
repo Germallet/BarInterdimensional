@@ -1,17 +1,17 @@
-import * as discord from "discord.js";
 import { ServidorDiscord } from "./DiscordAPI/ServidorDiscord";
 import { Mundo } from "./Mundo";
-import { PermisosDeCanal } from "./DiscordAPI/CanalDiscord";
+import { PermisosDeCanal, CanalDiscord } from "./DiscordAPI/CanalDiscord";
 import { CategoríaDiscord } from "./DiscordAPI/CategoríaDiscord";
 import { CanalDeVozDiscord } from "./DiscordAPI/CanalDeVozDiscord";
 import { CanalDeTextoDiscord } from "./DiscordAPI/CanalDeTextoDiscord";
+import { RolDiscord } from "./DiscordAPI/RolDiscord";
 
 export class Nodo {
     private readonly nombre: string;
     private readonly mundo: Mundo;
     private canalVoz: CanalDeVozDiscord;
     private canalTexto: CanalDeTextoDiscord;
-    private rol: discord.Role;
+    private rol: RolDiscord;
     private readonly adyacentes: Array<Nodo> = new Array<Nodo>();
     
     public constructor(nombre: string, mundo: Mundo) { 
@@ -47,15 +47,13 @@ export class Nodo {
         this.adyacentes.push(adyacente);
         await adyacente.EstablecerVisible(this.rol);
     }
-    public async EstablecerVisible(rol: discord.Role) {
+    public async EstablecerVisible(rol: RolDiscord) {
         await this.canalVoz.CambiarPermisos(rol, this.PermisoDeCanalesAdyacente());
     }      
     
-    public TieneCanal(id: string) { return this.canalVoz.TieneId(id) || this.canalTexto.TieneId(id); }
+    public TieneCanal(canal: CanalDiscord) { return this.canalVoz.EsMismoCanal(canal) || this.canalTexto.EsMismoCanal(canal); }
 
-    public TieneRol(rol: discord.Role) { return rol?.id === this.rol.id; }
-
-    public ObtenerRol(): discord.Role { return this.rol; }
+    public ObtenerRol(): RolDiscord { return this.rol; }
 
     public ObtenerAdyacentes(): Array<Nodo> { return this.adyacentes; }
 

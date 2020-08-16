@@ -1,16 +1,16 @@
-import { ClienteDiscord } from "./DiscordAPI/ClienteDiscord";
+import { BotDiscord } from "./DiscordAPI/BotDiscord";
 
 export abstract class Bot {
-	private readonly cliente: ClienteDiscord = new ClienteDiscord();
+	private readonly bot: BotDiscord = new BotDiscord();
 
 	public async Conectarse(token: string) {
 		this.EstablecerEventos();
-		await this.cliente.Conectarse(token);
+		await this.bot.Conectarse(token);
 		this.Conectado();
 	}
 
 	protected EstablecerEvento(event: string, listener: any) {
-		this.cliente.EstablecerEvento(event, listener);
+		this.bot.EstablecerEvento(event, listener);
     }
     
 	protected abstract EstablecerEventos(): void;

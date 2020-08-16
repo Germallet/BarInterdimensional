@@ -1,7 +1,8 @@
 import * as discord from "discord.js";
-import { CanalDeVozDiscord } from "./CanalDeVozDiscord";
-import { CanalDeTextoDiscord } from "./CanalDeTextoDiscord";
-import { CategoríaDiscord } from "./CategoríaDiscord";
 
-export type CanalDiscord = CategoríaDiscord | CanalDeVozDiscord | CanalDeTextoDiscord
 export type PermisosDeCanal = discord.PermissionOverwriteOptions
+
+export interface CanalDiscord {
+    TieneId(id: string): boolean;
+    EsMismoCanal(canal: CanalDiscord): boolean;
+}

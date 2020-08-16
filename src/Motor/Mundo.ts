@@ -6,6 +6,7 @@ import { Consola } from "./Consola";
 import { Usuario } from "./Usuario";
 import { Configuración } from './Configuración';
 import { Universo } from "./Universo";
+import { CanalDiscord } from "./DiscordAPI/CanalDiscord";
 
 export class Mundo {
     private readonly servidor: ServidorDiscord;
@@ -23,7 +24,7 @@ export class Mundo {
         this.nodos = await configuración.CrearNodos(this, this.servidor, categoría);
         this.nodoInicial = this.nodos[0];
         
-        await Promise.all(this.servidor.ObtenerMiembros().map(miembro => this.CrearPerfil(Universo.Usuarios().ObtenerOCrearUsuario(miembro))));
+        await Promise.all(this.servidor.ObtenerClientes().map(cliente => this.CrearPerfil(Universo.Usuarios().ObtenerOCrearUsuario(cliente))));
         Consola.Normal('[MUNDO]', 'Mundo generado!');
     }
 
@@ -38,7 +39,7 @@ export class Mundo {
         return this.servidor.ObtenerNombre();
     }
 
-    public ObtenerNodo(id: string) {
-        return this.nodos.find(nodo => nodo.TieneCanal(id));
+    public ObtenerNodo(canal: CanalDiscord) {
+        return this.nodos.find(nodo => nodo.TieneCanal(canal));
     }
 }

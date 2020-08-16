@@ -36,7 +36,7 @@ export class Perfil {
         if(this.ultimoNodo != null)
             promesas.push(this.usuario.RemoverRol(this.ultimoNodo.ObtenerRol()));
         if(nodo != null)
-            promesas.push(this.usuario.AgregarRol(nodo.ObtenerRol()));
+            promesas.push(this.usuario.AgregarRol(nodo.ObtenerRol())); 
                 
         return Promise.all(promesas);
     }

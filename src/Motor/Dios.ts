@@ -2,24 +2,27 @@ import * as discord from "discord.js";
 import { Usuario } from "./Usuario";
 import { Mundo } from "./Mundo";
 import { Consola } from "./Consola";
-import { ClienteDiscord } from "./DiscordAPI/ClienteDiscord";
+import { BotDiscord } from "./DiscordAPI/BotDiscord";
 import { Universo } from "./Universo";
 import { ArchivoWeb } from "./ArchivoWeb";
 import { Configuración } from "./Configuración";
+import { ClienteDiscord } from "./DiscordAPI/ClienteDiscord";
+import { MensajeDiscord } from "./DiscordAPI/MensajeDiscord";
+import { ContenidoAdjuntoDiscord } from "./DiscordAPI/ContenidoAdjuntoDiscord";
 
 export class Dios {
-	private readonly cliente: ClienteDiscord = new ClienteDiscord();
+	private readonly bot: BotDiscord = new BotDiscord();
 
 	public async Conectarse() {
 		this.EstablecerEventos();
-		await this.cliente.Conectarse(process.env.DISCORD_BOT_TOKEN);
+		await this.bot.Conectarse(process.env.DISCORD_BOT_TOKEN);
 		this.Conectado();
 	}
 
 	private EstablecerEventos() {
-		this.cliente.EstablecerEvento('guildMemberAdd', this.CrearPerfil);
-		this.cliente.EstablecerEvento('voiceStateUpdate', this.CambioDeEstadoDeVoz);
-		this.cliente.EstablecerEvento('message', this.MensajeRecibido);
+		this.bot.EstablecerEventoNuevoCliente(this.CrearPerfil);
+		this.bot.EstablecerEventoCambioDeEstadoDeVoz(this.CambioDeEstadoDeVoz);
+		this.bot.EstablecerEventoMensajeRecibido(this.MensajeRecibido);
 	}
 
 	protected async Conectado() {
@@ -27,39 +30,38 @@ export class Dios {
         await Universo.Mundos().CargarMundos();
 	}
 
-	private async CrearPerfil(miembro: discord.GuildMember) {
-		const mundo: Mundo = Universo.Mundos().ObtenerMundo(miembro.guild.id);
-		const usuario: Usuario = Universo.Usuarios().ObtenerOCrearUsuario(miembro);
+	private async CrearPerfil(cliente: ClienteDiscord) {
+		const mundo: Mundo = Universo.Mundos().ObtenerMundo(cliente.ObtenerIdServidor());
+		const usuario: Usuario = Universo.Usuarios().ObtenerOCrearUsuario(cliente);
 		await mundo.CrearPerfil(usuario);
 	}
 
-	private CambioDeEstadoDeVoz(estadoAnterior: discord.GuildMember, estadoActual: discord.GuildMember) {
-		const canalAnterior = estadoAnterior.voiceChannel;
-		const canalActual = estadoActual.voiceChannel;
+	private CambioDeEstadoDeVoz(estadoAnterior: ClienteDiscord, estadoActual: ClienteDiscord) {
+		const canalAnterior = estadoAnterior.ObtenerCanalDeVoz();
+		const canalActual = estadoActual.ObtenerCanalDeVoz();
 
-		if (canalAnterior !== canalActual)
+		if (canalActual != null && !canalActual.EsMismoCanal(canalAnterior))
 		{
 			const usuario = Universo.Usuarios().ObtenerOCrearUsuario(estadoActual);
-			const nodo = canalActual != undefined ? Universo.Mundos().ObtenerNodo(canalActual.guild.id, canalActual.id) : null;
-			if(nodo != null) 
-				usuario.MoverseA(nodo);
-		}	
+			const nodo = Universo.Mundos().ObtenerNodo(canalActual);
+			usuario.MoverseA(nodo);
+		}
 	}
 
-	private async MensajeRecibido(mensaje: discord.Message, cliente: discord.Client) {
-		Consola.Normal('[DISCORD]', `${mensaje.author.username}: ${mensaje.content}`);
+	private async MensajeRecibido(mensaje: MensajeDiscord) {
+		Consola.Normal('[DISCORD]', `${mensaje.ObtenerNombreDeAutor()}: ${mensaje.ObtenerContenido()}`);
 
-		if (mensaje.content == '--Generar' && mensaje.attachments.size == 1) {
-			const adjunto: discord.MessageAttachment = mensaje.attachments.first();
+		if (mensaje.ObtenerContenido() == '--Generar' && mensaje.ObtenerArchivosAdjuntos().length == 1) {
+			const adjunto: ContenidoAdjuntoDiscord = mensaje.ObtenerArchivosAdjuntos()[0];
 
-			const contenidoArchivo: string = await new ArchivoWeb().Leer(adjunto.url);
+			const contenidoArchivo: string = await new ArchivoWeb().Leer(adjunto.ObtenerUrl());
 			const configuración: Configuración = new Configuración(contenidoArchivo);
 
-			Universo.Mundos().ObtenerMundo(mensaje.guild.id).Generar(configuración);
+			Universo.Mundos().ObtenerMundo(mensaje.ObtenerIdServidor()).Generar(configuración);
 		}
 	}
 
 	public async ObtenerGuild(id: string): Promise<discord.Guild> {
-		return this.cliente.ObtenerGuild(id);
+		return this.bot.ObtenerGuild(id);
 	}
 }
