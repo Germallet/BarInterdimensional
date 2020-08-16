@@ -19,8 +19,8 @@ export class CanalDeVozDiscord implements CanalDiscord {
         return this.canal.id === id;
     }
 
-    public async CambiarPermisos(rol: RolDiscord, permisos: discord.PermissionOverwriteOptions) {
-        this.canal.overwritePermissions(rol.Obtener(), permisos);
+    public async CambiarPermisos(permisos: discord.OverwriteResolvable[]) {
+        this.canal.overwritePermissions(permisos);
     }
 
     public EsMismoCanal(canal: CanalDiscord): boolean {

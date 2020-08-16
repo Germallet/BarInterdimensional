@@ -1,6 +1,6 @@
 import { ServidorDiscord } from "./DiscordAPI/ServidorDiscord";
 import { Mundo } from "./Mundo";
-import { PermisosDeCanal, CanalDiscord } from "./DiscordAPI/CanalDiscord";
+import { GrupoDePermisosDiscord, CanalDiscord } from "./DiscordAPI/CanalDiscord";
 import { CategoríaDiscord } from "./DiscordAPI/CategoríaDiscord";
 import { CanalDeVozDiscord } from "./DiscordAPI/CanalDeVozDiscord";
 import { CanalDeTextoDiscord } from "./DiscordAPI/CanalDeTextoDiscord";
@@ -39,8 +39,8 @@ export class Nodo {
             mentionable: false
         })
 
-        await this.canalVoz.CambiarPermisos(this.rol, this.PermisoDeCanalesPropios());
-        await this.canalTexto.CambiarPermisos(this.rol, this.PermisoDeCanalesPropios());
+        await this.canalVoz.CambiarPermisos([this.PermisoDeCanalesPropios()]);
+        await this.canalTexto.CambiarPermisos([this.PermisoDeCanalesPropios()]);
     }
 
     public async AgregarAdyacente(adyacente: Nodo) {
@@ -48,7 +48,7 @@ export class Nodo {
         await adyacente.EstablecerVisible(this.rol);
     }
     public async EstablecerVisible(rol: RolDiscord) {
-        await this.canalVoz.CambiarPermisos(rol, this.PermisoDeCanalesAdyacente());
+        await this.canalVoz.CambiarPermisos([this.PermisoDeCanalesAdyacente(rol)]);
     }      
     
     public TieneCanal(canal: CanalDiscord) { return this.canalVoz.EsMismoCanal(canal) || this.canalTexto.EsMismoCanal(canal); }
@@ -59,79 +59,81 @@ export class Nodo {
 
     public ObtenerMundo(): Mundo { return this.mundo; } 
 
-    private PermisoDeCanalesAdyacente(): PermisosDeCanal {
-        return {
-            ADMINISTRATOR: false,
-            CREATE_INSTANT_INVITE: false,
-            KICK_MEMBERS: false,
-            BAN_MEMBERS: false,
-            MANAGE_CHANNELS: false,
-            MANAGE_GUILD: false,
-            ADD_REACTIONS: false,
-            VIEW_AUDIT_LOG: false,
-            PRIORITY_SPEAKER: false,
-            STREAM: false,
-            VIEW_CHANNEL: true,
-            READ_MESSAGES: true,
-            SEND_MESSAGES: false,
-            SEND_TTS_MESSAGES: false,
-            MANAGE_MESSAGES: false,
-            EMBED_LINKS: false,
-            ATTACH_FILES: false,
-            READ_MESSAGE_HISTORY: false,
-            MENTION_EVERYONE: false,
-            USE_EXTERNAL_EMOJIS: false,
-            EXTERNAL_EMOJIS: false,
-            CONNECT: true,
-            SPEAK: true,
-            MUTE_MEMBERS: false,
-            DEAFEN_MEMBERS: false,
-            MOVE_MEMBERS: false,
-            USE_VAD: true,
-            CHANGE_NICKNAME: false,
-            MANAGE_NICKNAMES: false,
-            MANAGE_ROLES: false,
-            MANAGE_ROLES_OR_PERMISSIONS: false,
-            MANAGE_WEBHOOKS: false,
-            MANAGE_EMOJIS: false
-        };
+    private PermisoDeCanalesAdyacente(rolAdyacente: RolDiscord): GrupoDePermisosDiscord {
+        return rolAdyacente.CrearGrupoDePermisos(
+            [
+                'VIEW_CHANNEL',
+                'CONNECT',
+                'SPEAK',
+                'USE_VAD'
+            ],
+            [
+                'ADMINISTRATOR',
+                'CREATE_INSTANT_INVITE',
+                'KICK_MEMBERS',
+                'BAN_MEMBERS',
+                'MANAGE_CHANNELS',
+                'MANAGE_GUILD',
+                'ADD_REACTIONS',
+                'VIEW_AUDIT_LOG',
+                'PRIORITY_SPEAKER',
+                'STREAM',
+                'SEND_MESSAGES',
+                'SEND_TTS_MESSAGES',
+                'MANAGE_MESSAGES',
+                'EMBED_LINKS',
+                'ATTACH_FILES',
+                'READ_MESSAGE_HISTORY',
+                'MENTION_EVERYONE',
+                'USE_EXTERNAL_EMOJIS',
+                'MUTE_MEMBERS',
+                'DEAFEN_MEMBERS',
+                'MOVE_MEMBERS',
+                'CHANGE_NICKNAME',
+                'MANAGE_NICKNAMES',
+                'MANAGE_ROLES',
+                'MANAGE_WEBHOOKS',
+                'MANAGE_EMOJIS'
+            ]
+        );
     }
 
-    private PermisoDeCanalesPropios(): PermisosDeCanal {
-        return {
-            ADMINISTRATOR: false,
-            CREATE_INSTANT_INVITE: false,
-            KICK_MEMBERS: false,
-            BAN_MEMBERS: false,
-            MANAGE_CHANNELS: false,
-            MANAGE_GUILD: false,
-            ADD_REACTIONS: false,
-            VIEW_AUDIT_LOG: false,
-            PRIORITY_SPEAKER: false,
-            STREAM: false,
-            VIEW_CHANNEL: true,
-            READ_MESSAGES: true,
-            SEND_MESSAGES: true,
-            SEND_TTS_MESSAGES: false,
-            MANAGE_MESSAGES: false,
-            EMBED_LINKS: false,
-            ATTACH_FILES: false,
-            READ_MESSAGE_HISTORY: false,
-            MENTION_EVERYONE: false,
-            USE_EXTERNAL_EMOJIS: false,
-            EXTERNAL_EMOJIS: false,
-            CONNECT: true,
-            SPEAK: true,
-            MUTE_MEMBERS: false,
-            DEAFEN_MEMBERS: false,
-            MOVE_MEMBERS: false,
-            USE_VAD: true,
-            CHANGE_NICKNAME: false,
-            MANAGE_NICKNAMES: false,
-            MANAGE_ROLES: false,
-            MANAGE_ROLES_OR_PERMISSIONS: false,
-            MANAGE_WEBHOOKS: false,
-            MANAGE_EMOJIS: false
-        };
+    private PermisoDeCanalesPropios(): GrupoDePermisosDiscord {
+        return this.rol.CrearGrupoDePermisos(
+            [
+                'VIEW_CHANNEL',
+                'CONNECT',
+                'SPEAK',
+                'USE_VAD',
+                'SEND_MESSAGES'
+            ],
+            [
+                'ADMINISTRATOR',
+                'CREATE_INSTANT_INVITE',
+                'KICK_MEMBERS',
+                'BAN_MEMBERS',
+                'MANAGE_CHANNELS',
+                'MANAGE_GUILD',
+                'ADD_REACTIONS',
+                'VIEW_AUDIT_LOG',
+                'PRIORITY_SPEAKER',
+                'STREAM',
+                'SEND_TTS_MESSAGES',
+                'MANAGE_MESSAGES',
+                'EMBED_LINKS',
+                'ATTACH_FILES',
+                'READ_MESSAGE_HISTORY',
+                'MENTION_EVERYONE',
+                'USE_EXTERNAL_EMOJIS',
+                'MUTE_MEMBERS',
+                'DEAFEN_MEMBERS',
+                'MOVE_MEMBERS',
+                'CHANGE_NICKNAME',
+                'MANAGE_NICKNAMES',
+                'MANAGE_ROLES',
+                'MANAGE_WEBHOOKS',
+                'MANAGE_EMOJIS'
+            ]
+        );
     }
 }

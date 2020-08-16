@@ -1,6 +1,7 @@
 import * as discord from "discord.js";
 
-export type PermisosDeCanal = discord.PermissionOverwriteOptions
+export type GrupoDePermisosDiscord = discord.OverwriteResolvable
+export type PermisoDiscord = discord.PermissionString
 
 export interface CanalDiscord {
     TieneId(id: string): boolean;

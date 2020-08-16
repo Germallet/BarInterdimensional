@@ -7,6 +7,7 @@ import { Universo } from "./Universo";
 import { ArchivoWeb } from "./ArchivoWeb";
 import { Configuración } from "./Configuración";
 import { ClienteDiscord } from "./DiscordAPI/ClienteDiscord";
+import { EstadoDeVozDiscord } from "./DiscordAPI/EstadoDeVozDiscord";
 import { MensajeDiscord } from "./DiscordAPI/MensajeDiscord";
 import { ContenidoAdjuntoDiscord } from "./DiscordAPI/ContenidoAdjuntoDiscord";
 
@@ -36,14 +37,14 @@ export class Dios {
 		await mundo.CrearPerfil(usuario);
 	}
 
-	private CambioDeEstadoDeVoz(estadoAnterior: ClienteDiscord, estadoActual: ClienteDiscord) {
+	private CambioDeEstadoDeVoz(estadoAnterior: EstadoDeVozDiscord, estadoNuevo: EstadoDeVozDiscord) {
 		const canalAnterior = estadoAnterior.ObtenerCanalDeVoz();
-		const canalActual = estadoActual.ObtenerCanalDeVoz();
+		const canalNuevo = estadoNuevo.ObtenerCanalDeVoz();
 
-		if (canalActual != null && !canalActual.EsMismoCanal(canalAnterior))
+		if (canalNuevo != null && !canalNuevo.EsMismoCanal(canalAnterior))
 		{
-			const usuario = Universo.Usuarios().ObtenerOCrearUsuario(estadoActual);
-			const nodo = Universo.Mundos().ObtenerNodo(canalActual);
+			const usuario = Universo.Usuarios().ObtenerOCrearUsuario(estadoNuevo.ObtenerCliente());
+			const nodo = Universo.Mundos().ObtenerNodo(canalNuevo);
 			usuario.MoverseA(nodo);
 		}
 	}

@@ -1,4 +1,5 @@
 import * as discord from "discord.js";
+import { GrupoDePermisosDiscord, PermisoDiscord } from "./CanalDiscord";
 
 export class RolDiscord {
     private readonly rol: discord.Role;
@@ -7,5 +8,13 @@ export class RolDiscord {
 
     public Obtener(): discord.Role {
         return this.rol;
+    }
+
+    public CrearGrupoDePermisos(permitidos: PermisoDiscord[], denegados: PermisoDiscord[]): GrupoDePermisosDiscord {
+        return {
+            id: this.rol.id,
+            allow: permitidos,
+            deny: denegados
+        };
     }
 }

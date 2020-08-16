@@ -1,6 +1,5 @@
 import * as discord from "discord.js";
 import { RolDiscord } from "./RolDiscord";
-import { CanalDeVozDiscord } from "./CanalDeVozDiscord";
 
 export class ClienteDiscord {
 	private readonly cliente: discord.GuildMember;
@@ -9,10 +8,6 @@ export class ClienteDiscord {
 
 	public ObtenerIdServidor(): string {
 		return this.cliente.guild.id;
-	}
-
-	public ObtenerCanalDeVoz(): CanalDeVozDiscord {
-		return this.cliente.voiceChannel != undefined ? new CanalDeVozDiscord(this.cliente.voiceChannel) : null;
 	}
 
 	public TieneId(id: string): boolean {
@@ -24,10 +19,10 @@ export class ClienteDiscord {
 	}
 	
 	public AgregarRol(rol: RolDiscord) {
-		this.cliente.addRole(rol.Obtener())
+		this.cliente.roles.add(rol.Obtener())
 	}
 
 	public RemoverRol(rol: RolDiscord) {
-		this.cliente.removeRole(rol.Obtener())
+		this.cliente.roles.remove(rol.Obtener())
 	}
 }
