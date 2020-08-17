@@ -1,14 +1,13 @@
+import * as Discord from "@discord-api";
 import { Perfil } from "./Perfil";
 import { Mundo } from "./Mundo";
 import { Nodo } from "./Nodo";
-import { ClienteDiscord } from "./DiscordAPI/ClienteDiscord";
-import { RolDiscord } from "./DiscordAPI/RolDiscord";
 
 export class Usuario {
-    private readonly cliente: ClienteDiscord;
+    private readonly cliente: Discord.Cliente;
     private readonly perfiles: Array<Perfil> = new Array<Perfil>();
 
-    public constructor(cliente: ClienteDiscord) { this.cliente = cliente; }
+    public constructor(cliente: Discord.Cliente) { this.cliente = cliente; }
     
     public AgregarPerfil(perfil: Perfil) {
         this.perfiles.push(perfil);
@@ -21,7 +20,7 @@ export class Usuario {
         return this.cliente.TieneId(id);
     }
 
-    public EsCliente(cliente: ClienteDiscord) { return this.cliente.EsMismosCliente(cliente); }
+    public EsCliente(cliente: Discord.Cliente) { return this.cliente.EsMismosCliente(cliente); }
 
     public async MoverseA(nodo: Nodo) {
         const mundo: Mundo = nodo.ObtenerMundo();
@@ -29,6 +28,6 @@ export class Usuario {
         perfil.MoverseA(nodo);
     }
 
-    public async AgregarRol(rol: RolDiscord) { this.cliente.AgregarRol(rol); }
-    public async RemoverRol(rol: RolDiscord) { this.cliente.RemoverRol(rol); }
+    public async AgregarRol(rol: Discord.Rol) { this.cliente.AgregarRol(rol); }
+    public async RemoverRol(rol: Discord.Rol) { this.cliente.RemoverRol(rol); }
 }

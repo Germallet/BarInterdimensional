@@ -1,18 +1,13 @@
-import * as discord from "discord.js";
+import * as Discord from "@discord-api";
 import { Usuario } from "./Usuario";
 import { Mundo } from "./Mundo";
 import { Consola } from "./Consola";
-import { BotDiscord } from "./DiscordAPI/BotDiscord";
 import { Universo } from "./Universo";
 import { ArchivoWeb } from "./ArchivoWeb";
 import { Configuración } from "./Configuración";
-import { ClienteDiscord } from "./DiscordAPI/ClienteDiscord";
-import { EstadoDeVozDiscord } from "./DiscordAPI/EstadoDeVozDiscord";
-import { MensajeDiscord } from "./DiscordAPI/MensajeDiscord";
-import { ContenidoAdjuntoDiscord } from "./DiscordAPI/ContenidoAdjuntoDiscord";
 
 export class Dios {
-	private readonly bot: BotDiscord = new BotDiscord();
+	private readonly bot: Discord.Bot = new Discord.Bot();
 
 	public async Conectarse() {
 		this.EstablecerEventos();
@@ -31,13 +26,13 @@ export class Dios {
         await Universo.Mundos().CargarMundos();
 	}
 
-	private async CrearPerfil(cliente: ClienteDiscord) {
+	private async CrearPerfil(cliente: Discord.Cliente) {
 		const mundo: Mundo = Universo.Mundos().ObtenerMundo(cliente.ObtenerIdServidor());
 		const usuario: Usuario = Universo.Usuarios().ObtenerOCrearUsuario(cliente);
 		await mundo.CrearPerfil(usuario);
 	}
 
-	private CambioDeEstadoDeVoz(estadoAnterior: EstadoDeVozDiscord, estadoNuevo: EstadoDeVozDiscord) {
+	private CambioDeEstadoDeVoz(estadoAnterior: Discord.EstadoDeVoz, estadoNuevo: Discord.EstadoDeVoz) {
 		const canalAnterior = estadoAnterior.ObtenerCanalDeVoz();
 		const canalNuevo = estadoNuevo.ObtenerCanalDeVoz();
 
@@ -49,11 +44,11 @@ export class Dios {
 		}
 	}
 
-	private async MensajeRecibido(mensaje: MensajeDiscord) {
+	private async MensajeRecibido(mensaje: Discord.Mensaje) {
 		Consola.Normal('[DISCORD]', `${mensaje.ObtenerNombreDeAutor()}: ${mensaje.ObtenerContenido()}`);
 
 		if (mensaje.ObtenerContenido() == '--Generar' && mensaje.ObtenerArchivosAdjuntos().length == 1) {
-			const adjunto: ContenidoAdjuntoDiscord = mensaje.ObtenerArchivosAdjuntos()[0];
+			const adjunto: Discord.ContenidoAdjunto = mensaje.ObtenerArchivosAdjuntos()[0];
 
 			const contenidoArchivo: string = await new ArchivoWeb().Leer(adjunto.ObtenerUrl());
 			const configuración: Configuración = new Configuración(contenidoArchivo);
@@ -62,7 +57,7 @@ export class Dios {
 		}
 	}
 
-	public async ObtenerGuild(id: string): Promise<discord.Guild> {
-		return this.bot.ObtenerGuild(id);
+	public async ObtenerServidor(id: string): Promise<Discord.Servidor> {
+		return this.bot.ObtenerServidor(id);
 	}
 }

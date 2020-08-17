@@ -1,5 +1,5 @@
 import * as discord from "discord.js";
-import { GrupoDePermisosDiscord, PermisoDiscord } from "./CanalDiscord";
+import { GrupoDePermisosDiscord, PermisoDiscord } from "./PermisosDiscord";
 
 export class RolDiscord {
     private readonly rol: discord.Role;

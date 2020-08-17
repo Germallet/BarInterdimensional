@@ -1,17 +1,12 @@
-import { ServidorDiscord } from "./DiscordAPI/ServidorDiscord";
+import * as Discord from "@discord-api";
 import { Mundo } from "./Mundo";
-import { GrupoDePermisosDiscord, CanalDiscord } from "./DiscordAPI/CanalDiscord";
-import { CategoríaDiscord } from "./DiscordAPI/CategoríaDiscord";
-import { CanalDeVozDiscord } from "./DiscordAPI/CanalDeVozDiscord";
-import { CanalDeTextoDiscord } from "./DiscordAPI/CanalDeTextoDiscord";
-import { RolDiscord } from "./DiscordAPI/RolDiscord";
 
 export class Nodo {
     private readonly nombre: string;
     private readonly mundo: Mundo;
-    private canalVoz: CanalDeVozDiscord;
-    private canalTexto: CanalDeTextoDiscord;
-    private rol: RolDiscord;
+    private canalVoz: Discord.CanalDeVoz;
+    private canalTexto: Discord.CanalDeTexto;
+    private rol: Discord.Rol;
     private readonly adyacentes: Array<Nodo> = new Array<Nodo>();
     
     public constructor(nombre: string, mundo: Mundo) { 
@@ -19,17 +14,17 @@ export class Nodo {
         this.mundo = mundo;
     }
 
-    public async Generar(servidor: ServidorDiscord, categoría: CategoríaDiscord) {
+    public async Generar(servidor: Discord.Servidor, categoría: Discord.Categoría) {
         await this.CrearCanales(servidor, categoría);
         await this.CrearRol(servidor);
     }
 
-    private async CrearCanales(servidor: ServidorDiscord, categoría: CategoríaDiscord) {
+    private async CrearCanales(servidor: Discord.Servidor, categoría: Discord.Categoría) {
         this.canalTexto = await servidor.CrearCanalDeTexto(this.nombre, categoría);
         this.canalVoz = await servidor.CrearCanalDeVoz(this.nombre, categoría);
     }
     
-    private async CrearRol(servidor: ServidorDiscord) {
+    private async CrearRol(servidor: Discord.Servidor) {
         this.rol = await servidor.CrearRol({
             name: this.nombre,
             color: 'WHITE',
@@ -47,19 +42,19 @@ export class Nodo {
         this.adyacentes.push(adyacente);
         await adyacente.EstablecerVisible(this.rol);
     }
-    public async EstablecerVisible(rol: RolDiscord) {
+    public async EstablecerVisible(rol: Discord.Rol) {
         await this.canalVoz.CambiarPermisos([this.PermisoDeCanalesAdyacente(rol)]);
     }      
     
-    public TieneCanal(canal: CanalDiscord) { return this.canalVoz.EsMismoCanal(canal) || this.canalTexto.EsMismoCanal(canal); }
+    public TieneCanal(canal: Discord.Canal) { return this.canalVoz.EsMismoCanal(canal) || this.canalTexto.EsMismoCanal(canal); }
 
-    public ObtenerRol(): RolDiscord { return this.rol; }
+    public ObtenerRol(): Discord.Rol { return this.rol; }
 
     public ObtenerAdyacentes(): Array<Nodo> { return this.adyacentes; }
 
     public ObtenerMundo(): Mundo { return this.mundo; } 
 
-    private PermisoDeCanalesAdyacente(rolAdyacente: RolDiscord): GrupoDePermisosDiscord {
+    private PermisoDeCanalesAdyacente(rolAdyacente: Discord.Rol): Discord.GrupoDePermisos {
         return rolAdyacente.CrearGrupoDePermisos(
             [
                 'VIEW_CHANNEL',
@@ -98,7 +93,7 @@ export class Nodo {
         );
     }
 
-    private PermisoDeCanalesPropios(): GrupoDePermisosDiscord {
+    private PermisoDeCanalesPropios(): Discord.GrupoDePermisos {
         return this.rol.CrearGrupoDePermisos(
             [
                 'VIEW_CHANNEL',

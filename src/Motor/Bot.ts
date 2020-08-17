@@ -1,7 +1,7 @@
-import { BotDiscord } from "./DiscordAPI/BotDiscord";
+import * as Discord from "@discord-api";
 
 export abstract class Bot {
-	private readonly bot: BotDiscord = new BotDiscord();
+	private readonly bot: Discord.Bot = new Discord.Bot();
 
 	public async Conectarse(token: string) {
 		this.EstablecerEventos();

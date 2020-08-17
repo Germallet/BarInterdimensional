@@ -1,5 +1,4 @@
-import { ServidorDiscord } from "./DiscordAPI/ServidorDiscord";
-import { CategoríaDiscord } from "./DiscordAPI/CategoríaDiscord";
+import * as Discord from "@discord-api";
 import { Mundo } from "./Mundo";
 import { Nodo } from "./Nodo";
 import sxml = require("sxml");
@@ -14,7 +13,7 @@ export class Configuración {
         this.xml = new XML(contenido);
     }
     
-    public async CrearNodos(mundo: Mundo, servidor: ServidorDiscord, categoría: CategoríaDiscord): Promise<Array<Nodo>>
+    public async CrearNodos(mundo: Mundo, servidor: Discord.Servidor, categoría: Discord.Categoría): Promise<Array<Nodo>>
     {
         const xmlNodos: XMLList = this.xml.get("nodos").at(0).get("nodo");
         const nodos: Array<[string, Nodo]> = new Array<[string, Nodo]>();

@@ -1,9 +1,8 @@
-import { ServidorDiscord } from "./DiscordAPI/ServidorDiscord";
+import * as Discord from "@discord-api";
 import * as BD from "@prisma/client"
 import { Mundo } from "./Mundo";
 import { Universo } from "./Universo";
 import { Consola } from "./Consola";
-import { CanalDeVozDiscord } from "./DiscordAPI/CanalDeVozDiscord";
 
 export class GestorDeMundos {
 	private readonly mundos: Array<Mundo> = new Array<Mundo>();
@@ -14,7 +13,7 @@ export class GestorDeMundos {
     }
 
     public async CargarMundo(id: string) {
-        const mundo: Mundo = new Mundo(new ServidorDiscord(await Universo.Dios().ObtenerGuild(id)));
+        const mundo: Mundo = new Mundo(await Universo.Dios().ObtenerServidor(id));
         this.mundos.push(mundo);
         Consola.Normal('[MUNDOS]', `Mundo cargado (nombre: ${mundo.ObtenerNombre()}, id: ${id})`);
     }
@@ -23,7 +22,7 @@ export class GestorDeMundos {
         return this.mundos.find(mundo => mundo.EsServidor(id));
     }
 
-    public ObtenerNodo(canal: CanalDeVozDiscord) {
+    public ObtenerNodo(canal: Discord.CanalDeVoz) {
         if(canal == null)
             return null;
         const mundo: Mundo = this.ObtenerMundo(canal.ObtenerIdServidor());

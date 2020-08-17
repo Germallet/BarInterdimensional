@@ -1,0 +1,12 @@
+export { BotDiscord as Bot } from './BotDiscord';
+export { CanalDeTextoDiscord as CanalDeTexto } from './CanalDeTextoDiscord';
+export { CanalDeVozDiscord as CanalDeVoz } from './CanalDeVozDiscord';
+export { CanalDiscord as Canal } from './CanalDiscord';
+export { CategoríaDiscord as Categoría } from './CategoríaDiscord';
+export { ClienteDiscord as Cliente } from './ClienteDiscord';
+export { ContenidoAdjuntoDiscord as ContenidoAdjunto } from './ContenidoAdjuntoDiscord';
+export { EstadoDeVozDiscord as EstadoDeVoz } from './EstadoDeVozDiscord';
+export { MensajeDiscord as Mensaje } from './MensajeDiscord';
+export { PermisoDiscord as Permiso, GrupoDePermisosDiscord as GrupoDePermisos } from './PermisosDiscord';
+export { RolDiscord as Rol } from './RolDiscord';
+export { ServidorDiscord as Servidor } from './ServidorDiscord';

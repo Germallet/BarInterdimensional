@@ -4,7 +4,7 @@ import { CanalDeVozDiscord } from "./CanalDeVozDiscord";
 import { CanalDeTextoDiscord } from "./CanalDeTextoDiscord";
 import { CanalDiscord } from "./CanalDiscord";
 import { RolDiscord } from "./RolDiscord";
-import { Consola } from "../Consola";
+import { Consola } from "../Motor/Consola";
 import { ClienteDiscord } from "./ClienteDiscord";
 
 export class ServidorDiscord {

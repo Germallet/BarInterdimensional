@@ -1,7 +1,7 @@
 import { Usuario } from "./Usuario";
-import { Mutex } from 'async-mutex';
 import { Mundo } from "./Mundo";
 import { Nodo } from "./Nodo";
+import { Mutex } from 'async-mutex';
 
 export class Perfil {
     private readonly usuario: Usuario;

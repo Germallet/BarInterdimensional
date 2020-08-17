@@ -2,6 +2,7 @@ import * as discord from "discord.js";
 import { ClienteDiscord } from "./ClienteDiscord";
 import { EstadoDeVozDiscord } from "./EstadoDeVozDiscord";
 import { MensajeDiscord } from "./MensajeDiscord";
+import { ServidorDiscord } from "./ServidorDiscord";
 
 export class BotDiscord {
 	private readonly bot: discord.Client = new discord.Client();
@@ -14,8 +15,8 @@ export class BotDiscord {
 		this.bot.on(event, listener);
 	}
 
-	public async ObtenerGuild(id: string): Promise<discord.Guild> {
-		return this.bot.guilds.cache.get(id);
+	public async ObtenerServidor(id: string): Promise<ServidorDiscord> {
+		return new ServidorDiscord(this.bot.guilds.cache.get(id));
 	}
 
 	public EstablecerEventoNuevoCliente(funcion: (cliente: ClienteDiscord) => void) {
