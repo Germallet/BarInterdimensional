@@ -1,4 +1,4 @@
-import * as Discord from "@discord-api";
+import * as Discord from '@discord-api';
 
 export abstract class Bot {
 	private readonly bot: Discord.Bot = new Discord.Bot();
@@ -11,8 +11,8 @@ export abstract class Bot {
 
 	protected EstablecerEvento(event: string, listener: any) {
 		this.bot.EstablecerEvento(event, listener);
-    }
-    
+	}
+
 	protected abstract EstablecerEventos(): void;
 	protected abstract Conectado(): void;
 }

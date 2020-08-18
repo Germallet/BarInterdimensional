@@ -1,10 +1,10 @@
-import * as Discord from "@discord-api";
-import { Usuario } from "./Usuario";
-import { Mundo } from "./Mundo";
-import { Consola } from "./Consola";
-import { Universo } from "./Universo";
-import { ArchivoWeb } from "./ArchivoWeb";
-import { Configuración } from "./Configuración";
+import * as Discord from '@discord-api';
+import { Usuario } from './Usuario';
+import { Mundo } from './Mundo';
+import { Consola } from './Consola';
+import { Universo } from './Universo';
+import { ArchivoWeb } from './ArchivoWeb';
+import { Configuración } from './Configuración';
 
 export class Dios {
 	private readonly bot: Discord.Bot = new Discord.Bot();
@@ -23,7 +23,7 @@ export class Dios {
 
 	protected async Conectado() {
 		Consola.Normal('[DISCORD]', 'Conectado!');
-        await Universo.Mundos().CargarMundos();
+		await Universo.Mundos().CargarMundos();
 	}
 
 	private async CrearPerfil(cliente: Discord.Cliente) {
@@ -36,8 +36,7 @@ export class Dios {
 		const canalAnterior = estadoAnterior.ObtenerCanalDeVoz();
 		const canalNuevo = estadoNuevo.ObtenerCanalDeVoz();
 
-		if (canalNuevo != null && !canalNuevo.EsMismoCanal(canalAnterior))
-		{
+		if (canalNuevo != null && !canalNuevo.EsMismoCanal(canalAnterior)) {
 			const usuario = Universo.Usuarios().ObtenerOCrearUsuario(estadoNuevo.ObtenerCliente());
 			const nodo = Universo.Mundos().ObtenerNodo(canalNuevo);
 			usuario.MoverseA(nodo);

@@ -1,8 +1,8 @@
-import * as discord from "discord.js";
-import { ClienteDiscord } from "./ClienteDiscord";
-import { EstadoDeVozDiscord } from "./EstadoDeVozDiscord";
-import { MensajeDiscord } from "./MensajeDiscord";
-import { ServidorDiscord } from "./ServidorDiscord";
+import * as discord from 'discord.js';
+import { ClienteDiscord } from './ClienteDiscord';
+import { EstadoDeVozDiscord } from './EstadoDeVozDiscord';
+import { MensajeDiscord } from './MensajeDiscord';
+import { ServidorDiscord } from './ServidorDiscord';
 
 export class BotDiscord {
 	private readonly bot: discord.Client = new discord.Client();
@@ -24,7 +24,7 @@ export class BotDiscord {
 	}
 
 	public EstablecerEventoCambioDeEstadoDeVoz(funcion: (estadoAnterior: EstadoDeVozDiscord, estadoNuevo: EstadoDeVozDiscord) => void) {
-		this.bot.on('voiceStateUpdate', (estadoAnterior: discord.VoiceState, estadoNuevo: discord.VoiceState)  => funcion(new EstadoDeVozDiscord(estadoAnterior), new EstadoDeVozDiscord(estadoNuevo)));
+		this.bot.on('voiceStateUpdate', (estadoAnterior: discord.VoiceState, estadoNuevo: discord.VoiceState) => funcion(new EstadoDeVozDiscord(estadoAnterior), new EstadoDeVozDiscord(estadoNuevo)));
 	}
 
 	public EstablecerEventoMensajeRecibido(funcion: (mensaje: MensajeDiscord) => void) {

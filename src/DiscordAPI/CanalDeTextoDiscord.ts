@@ -1,29 +1,30 @@
-import * as discord from "discord.js";
-import { CanalDiscord } from "./CanalDiscord";
-import { RolDiscord } from "./RolDiscord";
+import * as discord from 'discord.js';
+import { CanalDiscord } from './CanalDiscord';
 
-export class CanalDeTextoDiscord implements CanalDiscord{
-    private readonly canal: discord.TextChannel;
+export class CanalDeTextoDiscord implements CanalDiscord {
+	private readonly canal: discord.TextChannel;
 
-    public constructor(canal: discord.TextChannel) { this.canal = canal; }
+	public constructor(canal: discord.TextChannel) {
+		this.canal = canal;
+	}
 
-    public Obtener(): discord.TextChannel {
-        return this.canal;
-    }
+	public Obtener(): discord.TextChannel {
+		return this.canal;
+	}
 
-    public ObtenerIdServidor(): string {
-        return this.canal.guild.id
-    }
+	public ObtenerIdServidor(): string {
+		return this.canal.guild.id;
+	}
 
-    public TieneId(id: string): boolean {
-        return this.canal.id === id;
-    }
+	public TieneId(id: string): boolean {
+		return this.canal.id === id;
+	}
 
-    public async CambiarPermisos(permisos: discord.OverwriteResolvable[]) {
-        this.canal.overwritePermissions(permisos);
-    }
+	public async CambiarPermisos(permisos: discord.OverwriteResolvable[]) {
+		this.canal.overwritePermissions(permisos);
+	}
 
-    public EsMismoCanal(canal: CanalDiscord): boolean {
-        return canal != undefined && canal.TieneId(this.canal.id);
-    }
+	public EsMismoCanal(canal: CanalDiscord): boolean {
+		return canal != undefined && canal.TieneId(this.canal.id);
+	}
 }

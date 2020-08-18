@@ -1,5 +1,5 @@
 {
-	"name": "BarInterdimensional",
+	"name": "bar-interdimensional",
 	"version": "1.0.0",
 	"description": "El mejor Bar Interdimensional del universo",
 	"repository": {
@@ -17,6 +17,8 @@
 	"devDependencies": {
 		"@prisma/cli": "^2.4.1",
 		"nodemon": "^2.0.4",
+		"prettier": "^2.0.5",
+		"prettier-plugin-package": "^1.0.0",
 		"tslint": "^6.1.3",
 		"typescript": "^3.9.7"
 	},
@@ -32,5 +34,17 @@
 	},
 	"engines": {
 		"node": "13.x"
+	},
+	"prettier": {
+		"printWidth": 1000,
+		"tabWidth": 4,
+		"useTabs": true,
+		"semi": true,
+		"singleQuote": true,
+		"quoteProps": "consistent",
+		"trailingComma": "none",
+		"bracketSpacing": true,
+		"arrowParens": "always",
+		"proseWrap": "preserve"
 	}
 }
