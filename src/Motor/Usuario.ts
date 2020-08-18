@@ -1,4 +1,4 @@
-import * as Discord from '@discord-api';
+import * as Discord from '../DiscordAPI/index';
 import { Perfil } from './Perfil';
 import { Mundo } from './Mundo';
 import { Nodo } from './Nodo';
@@ -14,8 +14,13 @@ export class Usuario {
 	public AgregarPerfil(perfil: Perfil) {
 		this.perfiles.push(perfil);
 	}
+
 	private ObtenerPerfil(mundo: Mundo): Perfil {
 		return this.perfiles.find((perfil) => perfil.EsDeMundo(mundo));
+	}
+
+	public ObtenerCliente(): Discord.Cliente {
+		return this.cliente;
 	}
 
 	public TieneId(id: string) {
@@ -26,10 +31,14 @@ export class Usuario {
 		return this.cliente.EsMismosCliente(cliente);
 	}
 
-	public async MoverseA(nodo: Nodo) {
-		const mundo: Mundo = nodo.ObtenerMundo();
+	public async Moverse(origen: Nodo, destino: Nodo) {
+		const mundo: Mundo = origen == null ? destino.ObtenerMundo() : origen.ObtenerMundo();
 		const perfil: Perfil = this.ObtenerPerfil(mundo);
-		perfil.MoverseA(nodo);
+		return perfil.Moverse(origen, destino);
+	}
+
+	public CrearGrupoDePermisos(permitidos: Discord.Permiso[], denegados: Discord.Permiso[]): Discord.GrupoDePermisos {
+		return this.cliente.CrearGrupoDePermisos(permitidos, denegados);
 	}
 
 	public async AgregarRol(rol: Discord.Rol) {

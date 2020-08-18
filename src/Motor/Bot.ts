@@ -1,4 +1,4 @@
-import * as Discord from '@discord-api';
+import * as Discord from '../DiscordAPI/index';
 
 export abstract class Bot {
 	private readonly bot: Discord.Bot = new Discord.Bot();

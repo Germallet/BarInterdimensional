@@ -1,4 +1,4 @@
-import * as Discord from '@discord-api';
+import * as Discord from '../DiscordAPI/index';
 import { Nodo } from './Nodo';
 import { Perfil } from './Perfil';
 import { Consola } from './Consola';
@@ -34,7 +34,7 @@ export class Mundo {
 		const perfil: Perfil = new Perfil(usuario, this);
 		this.perfiles.push(perfil);
 		usuario.AgregarPerfil(perfil);
-		usuario.MoverseA(this.nodoInicial);
+		return this.nodoInicial.EstablecerInicial(usuario);
 	}
 
 	public ObtenerNombre(): string {

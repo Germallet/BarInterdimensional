@@ -1,8 +1,10 @@
 import * as discord from 'discord.js';
 import { CanalDiscord } from './CanalDiscord';
+import { ClienteDiscord } from './ClienteDiscord';
 
 export class CanalDeVozDiscord implements CanalDiscord {
 	private readonly canal: discord.VoiceChannel;
+	private readonly permisos: discord.OverwriteResolvable[] = new Array<discord.OverwriteResolvable>();
 
 	public constructor(canal: discord.VoiceChannel) {
 		this.canal = canal;
@@ -21,7 +23,12 @@ export class CanalDeVozDiscord implements CanalDiscord {
 	}
 
 	public async CambiarPermisos(permisos: discord.OverwriteResolvable[]) {
-		this.canal.overwritePermissions(permisos);
+		if (permisos.length != 0 && permisos[0].id != '213823616285016064') return;
+		await this.canal.overwritePermissions(permisos);
+	}
+
+	public async RemoverPermisos(cliente: ClienteDiscord) {
+		await this.canal.permissionOverwrites.get(cliente.ObtenerId()).delete();
 	}
 
 	public EsMismoCanal(canal: CanalDiscord): boolean {

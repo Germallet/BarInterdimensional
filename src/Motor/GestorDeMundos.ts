@@ -1,4 +1,4 @@
-import * as Discord from '@discord-api';
+import * as Discord from '../DiscordAPI/index';
 import * as BD from '@prisma/client';
 import { Mundo } from './Mundo';
 import { Universo } from './Universo';

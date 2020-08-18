@@ -1,4 +1,4 @@
-import * as Discord from '@discord-api';
+import * as Discord from '../DiscordAPI/index';
 import { Usuario } from './Usuario';
 import { Mundo } from './Mundo';
 import { Consola } from './Consola';
@@ -36,10 +36,11 @@ export class Dios {
 		const canalAnterior = estadoAnterior.ObtenerCanalDeVoz();
 		const canalNuevo = estadoNuevo.ObtenerCanalDeVoz();
 
-		if (canalNuevo != null && !canalNuevo.EsMismoCanal(canalAnterior)) {
+		if (canalNuevo == null || !canalNuevo.EsMismoCanal(canalAnterior)) {
 			const usuario = Universo.Usuarios().ObtenerOCrearUsuario(estadoNuevo.ObtenerCliente());
-			const nodo = Universo.Mundos().ObtenerNodo(canalNuevo);
-			usuario.MoverseA(nodo);
+			const origen = Universo.Mundos().ObtenerNodo(canalAnterior);
+			const destino = Universo.Mundos().ObtenerNodo(canalNuevo);
+			usuario.Moverse(origen, destino);
 		}
 	}
 
