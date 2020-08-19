@@ -7,11 +7,11 @@ import { ServidorDiscord } from './ServidorDiscord';
 export class BotDiscord {
 	private readonly bot: discord.Client = new discord.Client();
 
-	public async Conectarse(token: string) {
+	public async Conectarse(token: string): Promise<void> {
 		await this.bot.login(token);
 	}
 
-	public EstablecerEvento(event: string, listener: any) {
+	public EstablecerEvento(event: string, listener: any): void {
 		this.bot.on(event, listener);
 	}
 
@@ -19,15 +19,15 @@ export class BotDiscord {
 		return new ServidorDiscord(this.bot.guilds.cache.get(id));
 	}
 
-	public EstablecerEventoNuevoCliente(funcion: (cliente: ClienteDiscord) => void) {
+	public EstablecerEventoNuevoCliente(funcion: (cliente: ClienteDiscord) => void): void {
 		this.bot.on('guildMemberAdd', (guildmember: discord.GuildMember) => funcion(new ClienteDiscord(guildmember)));
 	}
 
-	public EstablecerEventoCambioDeEstadoDeVoz(funcion: (estadoAnterior: EstadoDeVozDiscord, estadoNuevo: EstadoDeVozDiscord) => void) {
+	public EstablecerEventoCambioDeEstadoDeVoz(funcion: (estadoAnterior: EstadoDeVozDiscord, estadoNuevo: EstadoDeVozDiscord) => void): void {
 		this.bot.on('voiceStateUpdate', (estadoAnterior: discord.VoiceState, estadoNuevo: discord.VoiceState) => funcion(new EstadoDeVozDiscord(estadoAnterior), new EstadoDeVozDiscord(estadoNuevo)));
 	}
 
-	public EstablecerEventoMensajeRecibido(funcion: (mensaje: MensajeDiscord) => void) {
+	public EstablecerEventoMensajeRecibido(funcion: (mensaje: MensajeDiscord) => void): void {
 		this.bot.on('message', (message: discord.Message) => funcion(new MensajeDiscord(message)));
 	}
 }

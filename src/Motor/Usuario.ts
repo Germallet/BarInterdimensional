@@ -11,7 +11,7 @@ export class Usuario {
 		this.cliente = cliente;
 	}
 
-	public AgregarPerfil(perfil: Perfil) {
+	public AgregarPerfil(perfil: Perfil): void {
 		this.perfiles.push(perfil);
 	}
 
@@ -23,15 +23,15 @@ export class Usuario {
 		return this.cliente;
 	}
 
-	public TieneId(id: string) {
+	public TieneId(id: string): boolean {
 		return this.cliente.TieneId(id);
 	}
 
-	public EsCliente(cliente: Discord.Cliente) {
+	public EsCliente(cliente: Discord.Cliente): boolean {
 		return this.cliente.EsMismosCliente(cliente);
 	}
 
-	public async Moverse(origen: Nodo, destino: Nodo) {
+	public async Moverse(origen: Nodo, destino: Nodo): Promise<void> {
 		const mundo: Mundo = origen == null ? destino.ObtenerMundo() : origen.ObtenerMundo();
 		const perfil: Perfil = this.ObtenerPerfil(mundo);
 		return perfil.Moverse(origen, destino);
@@ -41,10 +41,10 @@ export class Usuario {
 		return this.cliente.CrearGrupoDePermisos(permitidos, denegados);
 	}
 
-	public async AgregarRol(rol: Discord.Rol) {
+	public async AgregarRol(rol: Discord.Rol): Promise<void> {
 		this.cliente.AgregarRol(rol);
 	}
-	public async RemoverRol(rol: Discord.Rol) {
+	public async RemoverRol(rol: Discord.Rol): Promise<void> {
 		this.cliente.RemoverRol(rol);
 	}
 }

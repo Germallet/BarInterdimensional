@@ -17,7 +17,7 @@ export class Perfil {
 		return this.mundo === mundo;
 	}
 
-	public async Moverse(origen: Nodo, destino: Nodo) {
+	public async Moverse(origen: Nodo, destino: Nodo): Promise<void> {
 		const release = await this.mutex.acquire();
 
 		if (origen !== destino) {

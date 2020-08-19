@@ -33,11 +33,11 @@ export class ClienteDiscord {
 		};
 	}
 
-	public AgregarRol(rol: RolDiscord) {
+	public AgregarRol(rol: RolDiscord): void {
 		this.cliente.roles.add(rol.Obtener());
 	}
 
-	public RemoverRol(rol: RolDiscord) {
+	public RemoverRol(rol: RolDiscord): void {
 		this.cliente.roles.remove(rol.Obtener());
 	}
 }

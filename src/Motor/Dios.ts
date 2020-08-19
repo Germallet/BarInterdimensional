@@ -9,30 +9,30 @@ import { Configuración } from './Configuración';
 export class Dios {
 	private readonly bot: Discord.Bot = new Discord.Bot();
 
-	public async Conectarse() {
+	public async Conectarse(): Promise<void> {
 		this.EstablecerEventos();
 		await this.bot.Conectarse(process.env.DISCORD_BOT_TOKEN);
 		this.Conectado();
 	}
 
-	private EstablecerEventos() {
+	private EstablecerEventos(): void {
 		this.bot.EstablecerEventoNuevoCliente(this.CrearPerfil);
 		this.bot.EstablecerEventoCambioDeEstadoDeVoz(this.CambioDeEstadoDeVoz);
 		this.bot.EstablecerEventoMensajeRecibido(this.MensajeRecibido);
 	}
 
-	protected async Conectado() {
+	protected async Conectado(): Promise<void> {
 		Consola.Normal('[DISCORD]', 'Conectado!');
 		await Universo.Mundos().CargarMundos();
 	}
 
-	private async CrearPerfil(cliente: Discord.Cliente) {
+	private async CrearPerfil(cliente: Discord.Cliente): Promise<void> {
 		const mundo: Mundo = Universo.Mundos().ObtenerMundo(cliente.ObtenerIdServidor());
 		const usuario: Usuario = Universo.Usuarios().ObtenerOCrearUsuario(cliente);
 		await mundo.CrearPerfil(usuario);
 	}
 
-	private CambioDeEstadoDeVoz(estadoAnterior: Discord.EstadoDeVoz, estadoNuevo: Discord.EstadoDeVoz) {
+	private CambioDeEstadoDeVoz(estadoAnterior: Discord.EstadoDeVoz, estadoNuevo: Discord.EstadoDeVoz): void {
 		const canalAnterior = estadoAnterior.ObtenerCanalDeVoz();
 		const canalNuevo = estadoNuevo.ObtenerCanalDeVoz();
 
@@ -44,7 +44,7 @@ export class Dios {
 		}
 	}
 
-	private async MensajeRecibido(mensaje: Discord.Mensaje) {
+	private async MensajeRecibido(mensaje: Discord.Mensaje): Promise<void> {
 		Consola.Normal('[DISCORD]', `${mensaje.ObtenerNombreDeAutor()}: ${mensaje.ObtenerContenido()}`);
 
 		if (mensaje.ObtenerContenido() == '--Generar' && mensaje.ObtenerArchivosAdjuntos().length == 1) {

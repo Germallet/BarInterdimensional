@@ -7,7 +7,7 @@ export class ContenidoAdjuntoDiscord {
 		this.adjunto = adjunto;
 	}
 
-	public ObtenerUrl() {
+	public ObtenerUrl(): string {
 		return this.adjunto.url;
 	}
 }

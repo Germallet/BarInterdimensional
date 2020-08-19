@@ -16,11 +16,11 @@ export class Mundo {
 		this.servidor = servidor;
 	}
 
-	public EsServidor(id: string) {
+	public EsServidor(id: string): boolean {
 		return this.servidor.TieneId(id);
 	}
 
-	public async Generar(configuración: Configuración) {
+	public async Generar(configuración: Configuración): Promise<void> {
 		await this.servidor.Limpiar();
 		const categoría: Discord.Categoría = await this.servidor.CrearCategoría('Mundo');
 		this.nodos = await configuración.CrearNodos(this, this.servidor, categoría);
@@ -30,7 +30,7 @@ export class Mundo {
 		Consola.Normal('[MUNDO]', 'Mundo generado!');
 	}
 
-	public async CrearPerfil(usuario: Usuario) {
+	public async CrearPerfil(usuario: Usuario): Promise<void[]> {
 		const perfil: Perfil = new Perfil(usuario, this);
 		this.perfiles.push(perfil);
 		usuario.AgregarPerfil(perfil);
@@ -41,7 +41,7 @@ export class Mundo {
 		return this.servidor.ObtenerNombre();
 	}
 
-	public ObtenerNodo(canal: Discord.Canal) {
+	public ObtenerNodo(canal: Discord.Canal): Nodo {
 		return this.nodos.find((nodo) => nodo.TieneCanal(canal));
 	}
 }

@@ -56,11 +56,11 @@ export class ServidorDiscord {
 		});
 	}
 
-	private async BorrarCanales() {
+	private async BorrarCanales(): Promise<void> {
 		Promise.all(this.servidor.channels.cache.map((canal) => canal.delete().catch((excepción) => Consola.Warning('[SERVIDOR]', `Excepción al borrar canal "${canal.name}" para limpiado de mundo "${this.servidor.name}": "${excepción}"`))));
 	}
 
-	private async BorrarRoles() {
+	private async BorrarRoles(): Promise<void> {
 		Promise.all(
 			this.servidor.roles.cache.map((rol) => {
 				if (rol.name != '@everyone' && rol.name != 'Dios') rol.delete().catch((excepción) => Consola.Warning('[SERVIDOR]', `Excepción al borrar rol "${rol.name}" para limpiado de mundo "${this.servidor.name}": "${excepción}"`));
@@ -68,7 +68,7 @@ export class ServidorDiscord {
 		);
 	}
 
-	public async Limpiar() {
+	public async Limpiar(): Promise<void> {
 		this.BorrarCanales();
 		this.BorrarRoles();
 	}
