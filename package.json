@@ -14,6 +14,7 @@
 	},
 	"scripts": {
 		"build": "tsc",
+		"build-and-run": "npm run build && npm run start-local",
 		"npm-install": "npm install",
 		"postinstall": "npm run build",
 		"prisma-generate": "npx prisma generate",
