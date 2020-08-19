@@ -9,18 +9,10 @@
 		"outDir": "dist",
 		"baseUrl": "src",
 		"paths": {
-			"*": [
-				"node_modules/*",
-				"src/types/*"
-			],
+			"*": ["node_modules/*", "src/types/*"],
 			"@discord-api": ["DiscordAPI/index"]
 		},
-		"lib": [
-			"es6",
-			"dom"
-		]
+		"lib": ["es6", "dom"]
 	},
-	"include": [
-		"src/**/*"
-	]
+	"include": ["src/**/*"]
 }
