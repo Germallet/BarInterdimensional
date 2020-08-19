@@ -1,11 +1,12 @@
 import * as Discord from '../DiscordAPI/index';
 import { Perfil } from './Perfil';
-import { Mundo } from './Mundo';
 import { Nodo } from './Nodo';
+import { Mutex } from 'async-mutex';
 
 export class Usuario {
 	private readonly cliente: Discord.Cliente;
 	private readonly perfiles: Array<Perfil> = new Array<Perfil>();
+	private readonly mutex: Mutex = new Mutex();
 
 	public constructor(cliente: Discord.Cliente) {
 		this.cliente = cliente;
@@ -15,9 +16,9 @@ export class Usuario {
 		this.perfiles.push(perfil);
 	}
 
-	private ObtenerPerfil(mundo: Mundo): Perfil {
+	/*private ObtenerPerfil(mundo: Mundo): Perfil {
 		return this.perfiles.find((perfil) => perfil.EsDeMundo(mundo));
-	}
+	}*/
 
 	public ObtenerCliente(): Discord.Cliente {
 		return this.cliente;
@@ -32,19 +33,29 @@ export class Usuario {
 	}
 
 	public async Moverse(origen: Nodo, destino: Nodo): Promise<void> {
-		const mundo: Mundo = origen == null ? destino.ObtenerMundo() : origen.ObtenerMundo();
-		const perfil: Perfil = this.ObtenerPerfil(mundo);
-		return perfil.Moverse(origen, destino);
+		const release = await this.mutex.acquire();
+
+		try {
+			if (origen != null && destino != null && !origen.EsAdyacenteCon(destino)) {
+				return this.MovimientoForzado(destino, origen);
+			} else {
+				return this.MovimientoNormal(origen, destino);
+			}
+		} finally {
+			release();
+		}
+	}
+
+	private async MovimientoNormal(origen: Nodo, destino: Nodo): Promise<void> {
+		if (origen != null) await origen.SalirHacia(this, destino);
+		if (destino != null) await destino.LlegarDesde(this, origen);
+	}
+
+	private async MovimientoForzado(origen: Nodo, destino: Nodo): Promise<void> {
+		await Promise.all(new Array<Promise<void>>(this.cliente.CambiarCanalDeVoz(destino.ObtenerCanalDeVoz()), this.MovimientoNormal(origen, destino)));
 	}
 
 	public CrearGrupoDePermisos(permitidos: Discord.Permiso[], denegados: Discord.Permiso[]): Discord.GrupoDePermisos {
 		return this.cliente.CrearGrupoDePermisos(permitidos, denegados);
-	}
-
-	public async AgregarRol(rol: Discord.Rol): Promise<void> {
-		this.cliente.AgregarRol(rol);
-	}
-	public async RemoverRol(rol: Discord.Rol): Promise<void> {
-		this.cliente.RemoverRol(rol);
 	}
 }

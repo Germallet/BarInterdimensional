@@ -32,7 +32,7 @@ export class Dios {
 		await mundo.CrearPerfil(usuario);
 	}
 
-	private CambioDeEstadoDeVoz(estadoAnterior: Discord.EstadoDeVoz, estadoNuevo: Discord.EstadoDeVoz): void {
+	private async CambioDeEstadoDeVoz(estadoAnterior: Discord.EstadoDeVoz, estadoNuevo: Discord.EstadoDeVoz): Promise<void> {
 		const canalAnterior = estadoAnterior.ObtenerCanalDeVoz();
 		const canalNuevo = estadoNuevo.ObtenerCanalDeVoz();
 
@@ -40,7 +40,7 @@ export class Dios {
 			const usuario = Universo.Usuarios().ObtenerOCrearUsuario(estadoNuevo.ObtenerCliente());
 			const origen = Universo.Mundos().ObtenerNodo(canalAnterior);
 			const destino = Universo.Mundos().ObtenerNodo(canalNuevo);
-			usuario.Moverse(origen, destino);
+			await usuario.Moverse(origen, destino);
 		}
 	}
 

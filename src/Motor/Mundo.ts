@@ -30,7 +30,7 @@ export class Mundo {
 		Consola.Normal('[MUNDO]', 'Mundo generado!');
 	}
 
-	public async CrearPerfil(usuario: Usuario): Promise<void[]> {
+	public async CrearPerfil(usuario: Usuario): Promise<void> {
 		const perfil: Perfil = new Perfil(usuario, this);
 		this.perfiles.push(perfil);
 		usuario.AgregarPerfil(perfil);

@@ -50,8 +50,12 @@ export class Nodo {
 		return this.mundo;
 	}
 
-	public async EstablecerInicial(usuario: Usuario): Promise<void[]> {
-		return Promise.all(new Array<Promise<void>>(this.canalVoz.CambiarPermisos(this.PermisoDeCanalDeVoz(usuario)), this.canalTexto.CambiarPermisos(this.PermisoDeCanalDeTexto(usuario))));
+	public ObtenerCanalDeVoz(): Discord.CanalDeVoz {
+		return this.canalVoz;
+	}
+
+	public async EstablecerInicial(usuario: Usuario): Promise<void> {
+		await Promise.all(new Array<Promise<void>>(this.canalVoz.CambiarPermisos(this.PermisoDeCanalDeVoz(usuario)), this.canalTexto.CambiarPermisos(this.PermisoDeCanalDeTexto(usuario))));
 	}
 
 	public async LlegarDesde(usuario: Usuario, nodo: Nodo): Promise<void[]> {

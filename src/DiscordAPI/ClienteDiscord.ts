@@ -1,6 +1,7 @@
 import * as discord from 'discord.js';
 import { RolDiscord } from './RolDiscord';
 import { GrupoDePermisosDiscord, PermisoDiscord } from './PermisosDiscord';
+import { CanalDeVozDiscord } from './CanalDeVozDiscord';
 
 export class ClienteDiscord {
 	private readonly cliente: discord.GuildMember;
@@ -31,6 +32,10 @@ export class ClienteDiscord {
 			allow: permitidos,
 			deny: denegados
 		};
+	}
+
+	public async CambiarCanalDeVoz(canal: CanalDeVozDiscord): Promise<void> {
+		await this.cliente.voice.setChannel(canal.Obtener());
 	}
 
 	public AgregarRol(rol: RolDiscord): void {
