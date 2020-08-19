@@ -56,11 +56,11 @@ export class Nodo {
 
 	public async LlegarDesde(usuario: Usuario, nodo: Nodo): Promise<void[]> {
 		if (nodo == null) {
-			const promesas: Promise<any>[] = this.adyacentes.map((nodoAdyacente) => nodoAdyacente.EstablecerVisible(usuario));
+			const promesas: Promise<void>[] = this.adyacentes.map((nodoAdyacente) => nodoAdyacente.EstablecerVisible(usuario));
 			return Promise.all(promesas);
 		}
 
-		const promesas: Promise<any>[] = this.adyacentes.filter((nodoAdyacente) => !nodoAdyacente.EsMismoNodo(nodo)).map((nodoAdyacente) => nodoAdyacente.EstablecerVisible(usuario));
+		const promesas: Promise<void>[] = this.adyacentes.filter((nodoAdyacente) => !nodoAdyacente.EsMismoNodo(nodo)).map((nodoAdyacente) => nodoAdyacente.EstablecerVisible(usuario));
 
 		promesas.push(this.canalTexto.CambiarPermisos(this.PermisoDeCanalDeTexto(usuario)));
 		return Promise.all(promesas);
@@ -68,11 +68,11 @@ export class Nodo {
 
 	public async SalirHacia(usuario: Usuario, nodo: Nodo): Promise<void[]> {
 		if (nodo == null) {
-			const promesas: Promise<any>[] = this.adyacentes.map((nodoAdyacente) => nodoAdyacente.RemoverPermisosDeVoz(usuario));
+			const promesas: Promise<void>[] = this.adyacentes.map((nodoAdyacente) => nodoAdyacente.RemoverPermisosDeVoz(usuario));
 			return Promise.all(promesas);
 		}
 
-		const promesas: Promise<any>[] = this.adyacentes.filter((nodoAdyacente) => !nodoAdyacente.EsMismoNodo(nodo)).map((nodoAdyacente) => nodoAdyacente.RemoverPermisosDeVoz(usuario));
+		const promesas: Promise<void>[] = this.adyacentes.filter((nodoAdyacente) => !nodoAdyacente.EsMismoNodo(nodo)).map((nodoAdyacente) => nodoAdyacente.RemoverPermisosDeVoz(usuario));
 
 		if (!nodo.EsAdyacenteCon(this)) promesas.push(this.canalVoz.RemoverPermisos(usuario.ObtenerCliente()));
 		promesas.push(this.canalTexto.RemoverPermisos(usuario.ObtenerCliente()));

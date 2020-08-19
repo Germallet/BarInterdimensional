@@ -16,7 +16,7 @@ export abstract class Consola {
 		console.log(`[CONSOLA] [ERROR] No se pudo imprimir un mensaje en la consola: ${excepción}`);
 	}
 
-	public static Normal(modulo: string, mensaje: any): void {
+	public static Normal(modulo: string, mensaje: string): void {
 		try {
 			const texto = `\x1b[0m${mensaje}`;
 			this.LogConFormato(modulo, texto);
@@ -24,7 +24,7 @@ export abstract class Consola {
 			this.LogExcepción(excepción);
 		}
 	}
-	public static Warning(modulo: string, mensaje: any): void {
+	public static Warning(modulo: string, mensaje: string): void {
 		try {
 			const texto = `\x1b[33m${mensaje}`;
 			this.LogConFormato(modulo, texto);
@@ -32,7 +32,7 @@ export abstract class Consola {
 			this.LogExcepción(excepción);
 		}
 	}
-	public static Error(modulo: string, mensaje: any): void {
+	public static Error(modulo: string, mensaje: string): void {
 		try {
 			const texto = `\x1b[31m${mensaje}`;
 			this.LogConFormato(modulo, texto);
