@@ -17,14 +17,14 @@ export class Configuración {
 		const xmlNodos: XMLList = this.xml.get('nodos').at(0).get('nodo');
 		const nodos: Array<[string, Nodo]> = new Array<[string, Nodo]>();
 
-		for (let nodoXml of xmlNodos) {
+		for (const nodoXml of xmlNodos) {
 			const nodo: Nodo = new Nodo(nodoXml.getProperty('nombre'), mundo);
 			nodos.push([nodoXml.getProperty('id'), nodo]);
 		}
 		await Promise.all(nodos.map((nodo) => nodo[1].Generar(servidor, categoría)));
 
 		const promesas = new Array<Promise<void>>();
-		for (let nodoXml of xmlNodos) {
+		for (const nodoXml of xmlNodos) {
 			if (nodoXml.get('adyacentes').at(0).size() == 0) continue;
 			const nodo: Nodo = nodos.find((tupla) => tupla[0] == nodoXml.getProperty('id'))[1];
 			const adyacentes: XMLList = nodoXml.get('adyacentes').at(0).get('adyacente');
