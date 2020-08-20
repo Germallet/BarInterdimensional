@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "es6",
+		"moduleResolution": "node",
+		"sourceMap": true,
+		"noEmit": true,
+		"baseUrl": "./",
+		"lib": ["es6", "dom"],
+		"paths": {
+			"#discord-api": ["../src/DiscordAPI"]
+		}
+	}
+}
