@@ -7,21 +7,23 @@ export class Usuario {
 	private readonly cliente: Discord.Cliente;
 	private readonly perfiles: Array<Perfil> = new Array<Perfil>();
 	private readonly mutex: Mutex = new Mutex();
+	private corrigeMovimiento: boolean;
 
 	public constructor(cliente: Discord.Cliente) {
 		this.cliente = cliente;
+		this.corrigeMovimiento = false;
 	}
 
 	public AgregarPerfil(perfil: Perfil): void {
 		this.perfiles.push(perfil);
 	}
 
-	/*private ObtenerPerfil(mundo: Mundo): Perfil {
-		return this.perfiles.find((perfil) => perfil.EsDeMundo(mundo));
-	}*/
-
 	public ObtenerCliente(): Discord.Cliente {
 		return this.cliente;
+	}
+
+	public CorrigeMovimiento(): boolean {
+		return this.corrigeMovimiento;
 	}
 
 	public TieneId(id: string): boolean {
@@ -32,14 +34,16 @@ export class Usuario {
 		return this.cliente.EsMismosCliente(cliente);
 	}
 
+	//await new Promise( resolve => setTimeout(resolve, ms) );
 	public async Moverse(origen: Nodo, destino: Nodo): Promise<void> {
 		const release = await this.mutex.acquire();
 
 		try {
+			if (this.CorrigeMovimiento()) return;
 			if (origen != null && destino != null && !origen.EsAdyacenteCon(destino)) {
-				return this.MovimientoForzado(destino, origen);
+				await this.MovimientoForzado(destino, origen);
 			} else {
-				return this.MovimientoNormal(origen, destino);
+				await this.MovimientoNormal(origen, destino);
 			}
 		} finally {
 			release();
@@ -52,7 +56,9 @@ export class Usuario {
 	}
 
 	private async MovimientoForzado(origen: Nodo, destino: Nodo): Promise<void> {
-		await Promise.all(new Array<Promise<void>>(this.cliente.CambiarCanalDeVoz(destino.ObtenerCanalDeVoz()), this.MovimientoNormal(origen, destino)));
+		this.corrigeMovimiento = true;
+		await Promise.all(new Array<Promise<void>>(this.cliente.CambiarCanalDeVoz(destino.ObtenerCanalDeVoz()), destino.EstablecerInicial(this), this.MovimientoNormal(null, destino)));
+		this.corrigeMovimiento = false;
 	}
 
 	public CrearGrupoDePermisos(permitidos: Discord.Permiso[], denegados: Discord.Permiso[]): Discord.GrupoDePermisos {
