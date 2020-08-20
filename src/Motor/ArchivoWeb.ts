@@ -1,4 +1,4 @@
-import WebRequest from 'web-request';
+import * as WebRequest from 'web-request';
 
 export class ArchivoWeb {
 	public async Leer(url: string): Promise<string> {

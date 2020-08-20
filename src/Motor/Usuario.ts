@@ -1,4 +1,4 @@
-import * as Discord from '../DiscordAPI/index';
+import * as Discord from '#discord-api';
 import { Perfil } from './Perfil';
 import { Nodo } from './Nodo';
 import { Mutex } from 'async-mutex';

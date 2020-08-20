@@ -1,4 +1,4 @@
-import * as Discord from '../DiscordAPI/index';
+import * as Discord from '#discord-api';
 import { Nodo } from './Nodo';
 import { Perfil } from './Perfil';
 import { Consola } from './Consola';

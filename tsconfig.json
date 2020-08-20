@@ -1,15 +1,15 @@
 {
 	"compilerOptions": {
 		"module": "commonjs",
-		"esModuleInterop": true,
 		"target": "es6",
-		"noImplicitAny": true,
 		"moduleResolution": "node",
 		"sourceMap": true,
-		"outDir": "build",
-		"baseUrl": "src",
-		"allowSyntheticDefaultImports": true,
-		"lib": ["es6", "dom"]
+		"outDir": "./build",
+		"baseUrl": "./src",
+		"lib": ["es6", "dom"],
+		"paths": {
+			"#discord-api": ["DiscordAPI"]
+		}
 	},
 	"include": ["src/**/*"]
 }

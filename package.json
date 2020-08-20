@@ -19,7 +19,7 @@
 		"postinstall": "npm run build",
 		"prisma-generate": "npx prisma generate",
 		"prisma-introspect": "npx prisma introspect",
-		"start": "SET NODE_ENV=production & node build/inicio.js",
+		"start": "node -r ./paths.js build/inicio.js",
 		"start-dev": "heroku local"
 	},
 	"dependencies": {
@@ -29,6 +29,7 @@
 		"async-mutex": "^0.2.4",
 		"discord.js": "^12.3.1",
 		"sxml": "^1.0.4",
+		"tsconfig-paths": "^3.9.0",
 		"web-request": "^1.0.7"
 	},
 	"devDependencies": {
