@@ -8,19 +8,19 @@
 		"url": "https://github.com/Germallet/BarInterdimensional"
 	},
 	"author": "",
-	"main": "dist/inicio.js",
+	"main": "build/inicio.js",
 	"engines": {
 		"node": "13.x"
 	},
 	"scripts": {
-		"build": "tsc && eslint src/**/*.{js,ts}",
-		"build-and-run": "npm run build && npm run start-local",
+		"build": "tsc & eslint src/**/*.{js,ts}",
+		"build-and-run": "npm run build & npm run start-dev",
 		"npm-install": "npm install",
 		"postinstall": "npm run build",
 		"prisma-generate": "npx prisma generate",
 		"prisma-introspect": "npx prisma introspect",
-		"start": "node dist/inicio.js",
-		"start-local": "heroku local"
+		"start": "SET NODE_ENV=production & node build/inicio.js",
+		"start-dev": "heroku local"
 	},
 	"dependencies": {
 		"@prisma/client": "^2.5.0",
