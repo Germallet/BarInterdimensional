@@ -35,9 +35,9 @@ export class Dios {
 	private async CambioDeEstadoDeVoz(estadoAnterior: Discord.EstadoDeVoz, estadoNuevo: Discord.EstadoDeVoz): Promise<void> {
 		const canalAnterior = estadoAnterior.ObtenerCanalDeVoz();
 		const canalNuevo = estadoNuevo.ObtenerCanalDeVoz();
+		const usuario = Universo.Usuarios().ObtenerOCrearUsuario(estadoNuevo.ObtenerCliente());
 
 		if (canalNuevo == null || !canalNuevo.EsMismoCanal(canalAnterior)) {
-			const usuario = Universo.Usuarios().ObtenerOCrearUsuario(estadoNuevo.ObtenerCliente());
 			const origen = Universo.Mundos().ObtenerNodo(canalAnterior);
 			const destino = Universo.Mundos().ObtenerNodo(canalNuevo);
 			await usuario.Moverse(origen, destino);

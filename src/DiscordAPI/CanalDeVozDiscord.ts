@@ -29,7 +29,7 @@ export class CanalDeVozDiscord implements CanalDiscord {
 	}
 
 	public async RemoverPermisos(cliente: ClienteDiscord): Promise<void> {
-		await this.canal.permissionOverwrites.get(cliente.ObtenerId()).delete();
+		await this.canal.permissionOverwrites.get(cliente.ObtenerId())?.delete();
 	}
 
 	public EsMismoCanal(canal: CanalDiscord): boolean {
