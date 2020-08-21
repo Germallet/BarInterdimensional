@@ -5,7 +5,7 @@ import sxml = require('sxml');
 import XML = sxml.XML;
 import XMLList = sxml.XMLList;
 
-export class Configuración {
+export class ConfiguraciónXML {
 	private readonly xml: XML;
 	private nodos: Array<Nodo> = new Array<Nodo>();
 

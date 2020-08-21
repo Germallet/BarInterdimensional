@@ -3,7 +3,7 @@ import { Nodo } from './Nodo';
 import { Perfil } from './Perfil';
 import { Consola } from './Consola';
 import { Usuario } from './Usuario';
-import { Configuración } from './Configuración';
+import { ConfiguraciónXML } from './ConfiguraciónXML';
 import { Universo } from './Universo';
 
 export class Mundo {
@@ -20,7 +20,7 @@ export class Mundo {
 		return this.servidor.TieneId(id);
 	}
 
-	public async Generar(configuración: Configuración): Promise<void> {
+	public async Generar(configuración: ConfiguraciónXML): Promise<void> {
 		await this.servidor.Limpiar();
 		const categoría: Discord.Categoría = await this.servidor.CrearCategoría('Mundo');
 		this.nodos = await configuración.CrearNodos(this, this.servidor, categoría);

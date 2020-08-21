@@ -4,7 +4,7 @@ import { Mundo } from './Mundo';
 import { Consola } from './Consola';
 import { Universo } from './Universo';
 import { ArchivoWeb } from './ArchivoWeb';
-import { Configuración } from './Configuración';
+import { ConfiguraciónXML } from './ConfiguraciónXML';
 
 export class Dios {
 	private readonly bot: Discord.Bot = new Discord.Bot();
@@ -51,7 +51,7 @@ export class Dios {
 			const adjunto: Discord.ContenidoAdjunto = mensaje.ObtenerArchivosAdjuntos()[0];
 
 			const contenidoArchivo: string = await new ArchivoWeb().Leer(adjunto.ObtenerUrl());
-			const configuración: Configuración = new Configuración(contenidoArchivo);
+			const configuración: ConfiguraciónXML = new ConfiguraciónXML(contenidoArchivo);
 
 			Universo.Mundos().ObtenerMundo(mensaje.ObtenerIdServidor()).Generar(configuración);
 		}
