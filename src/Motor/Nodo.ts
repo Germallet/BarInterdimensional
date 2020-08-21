@@ -26,8 +26,13 @@ export class Nodo {
 	public async AgregarAdyacente(adyacente: Nodo): Promise<void> {
 		this.adyacentes.push(adyacente);
 	}
+
 	public async EstablecerVisible(usuario: Usuario): Promise<void> {
 		await this.canalVoz.CambiarPermisos(this.PermisoDeCanalDeVoz(usuario));
+	}
+
+	public async MostrarAdyacentes(usuario: Usuario): Promise<void> {
+		await Promise.all(this.adyacentes.map((nodoAdyacente) => nodoAdyacente.EstablecerVisible(usuario)));
 	}
 
 	public EsMismoNodo(nodo: Nodo): boolean {
@@ -54,38 +59,35 @@ export class Nodo {
 		return this.canalVoz;
 	}
 
-	public async EstablecerInicial(usuario: Usuario): Promise<void> {
+	public async Entrar(usuario: Usuario): Promise<void> {
 		await Promise.all(new Array<Promise<void>>(this.canalVoz.CambiarPermisos(this.PermisoDeCanalDeVoz(usuario)), this.canalTexto.CambiarPermisos(this.PermisoDeCanalDeTexto(usuario))));
 	}
 
-	public async LlegarDesde(usuario: Usuario, nodo: Nodo): Promise<void[]> {
+	public async LlegarDesde(usuario: Usuario, nodo: Nodo): Promise<void> {
 		if (nodo == null) {
-			const promesas: Promise<void>[] = this.adyacentes.map((nodoAdyacente) => nodoAdyacente.EstablecerVisible(usuario));
-			return Promise.all(promesas);
+			return this.MostrarAdyacentes(usuario);
 		}
-
-		const promesas: Promise<void>[] = this.adyacentes.filter((nodoAdyacente) => !nodoAdyacente.EsMismoNodo(nodo)).map((nodoAdyacente) => nodoAdyacente.EstablecerVisible(usuario));
-
-		promesas.push(this.canalTexto.CambiarPermisos(this.PermisoDeCanalDeTexto(usuario)));
-		return Promise.all(promesas);
+		await Promise.all(
+			new Array<Promise<void>>(
+				this.Entrar(usuario),
+				new Promise((resolve) => setTimeout(resolve, 1500)).then(() => this.MostrarAdyacentes(usuario))
+			)
+		);
 	}
 
-	public async SalirHacia(usuario: Usuario, nodo: Nodo): Promise<void[]> {
+	public async SalirHacia(usuario: Usuario, nodo: Nodo): Promise<void> {
 		if (nodo == null) {
-			const promesas: Promise<void>[] = this.adyacentes.map((nodoAdyacente) => nodoAdyacente.RemoverPermisosDeVoz(usuario));
-			return Promise.all(promesas);
+			return this.RemoverPermisosDeAdyacentes(usuario);
 		}
-
-		const promesas: Promise<void>[] = this.adyacentes.filter((nodoAdyacente) => !nodoAdyacente.EsMismoNodo(nodo)).map((nodoAdyacente) => nodoAdyacente.RemoverPermisosDeVoz(usuario));
-
-		if (!nodo.EsAdyacenteCon(this)) promesas.push(this.canalVoz.RemoverPermisos(usuario.ObtenerCliente()));
-		promesas.push(this.canalTexto.RemoverPermisos(usuario.ObtenerCliente()));
-
-		return Promise.all(promesas);
+		await Promise.all(new Array<Promise<void>>(this.RemoverPermisosDeAdyacentes(usuario), this.RemoverPermisos(usuario)));
 	}
 
-	private async RemoverPermisosDeVoz(usuario: Usuario) {
-		return this.canalVoz.RemoverPermisos(usuario.ObtenerCliente());
+	private async RemoverPermisos(usuario: Usuario): Promise<void> {
+		await Promise.all(new Array<Promise<void>>(this.canalVoz.RemoverPermisos(usuario.ObtenerCliente()), this.canalTexto.RemoverPermisos(usuario.ObtenerCliente())));
+	}
+
+	private async RemoverPermisosDeAdyacentes(usuario: Usuario): Promise<void> {
+		Promise.all(this.adyacentes.map((nodoAdyacente) => nodoAdyacente.RemoverPermisos(usuario)));
 	}
 
 	private PermisoDeCanalDeVoz(usuario: Usuario): Discord.GrupoDePermisos {
@@ -94,7 +96,7 @@ export class Nodo {
 
 	private PermisoDeCanalDeTexto(usuario: Usuario): Discord.GrupoDePermisos {
 		return usuario.CrearGrupoDePermisos(
-			['READ_MESSAGE_HISTORY', 'SEND_MESSAGES'], //"VIEW_CHANNEL"
+			['READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'VIEW_CHANNEL'], //"VIEW_CHANNEL"
 			['ADD_REACTIONS', 'SEND_TTS_MESSAGES', 'MANAGE_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'MENTION_EVERYONE', 'USE_EXTERNAL_EMOJIS', 'MANAGE_WEBHOOKS', 'MANAGE_EMOJIS']
 		);
 	}

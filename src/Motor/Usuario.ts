@@ -34,7 +34,6 @@ export class Usuario {
 		return this.cliente.EsMismosCliente(cliente);
 	}
 
-	//await new Promise( resolve => setTimeout(resolve, ms) );
 	public async Moverse(origen: Nodo, destino: Nodo): Promise<void> {
 		const release = await this.mutex.acquire();
 
@@ -57,7 +56,7 @@ export class Usuario {
 
 	private async MovimientoForzado(origen: Nodo, destino: Nodo): Promise<void> {
 		this.corrigeMovimiento = true;
-		await Promise.all(new Array<Promise<void>>(this.cliente.CambiarCanalDeVoz(destino.ObtenerCanalDeVoz()), destino.EstablecerInicial(this), this.MovimientoNormal(null, destino)));
+		await Promise.all(new Array<Promise<void>>(this.cliente.CambiarCanalDeVoz(destino.ObtenerCanalDeVoz()), destino.Entrar(this), this.MovimientoNormal(null, destino)));
 		this.corrigeMovimiento = false;
 	}
 

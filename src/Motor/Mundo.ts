@@ -34,7 +34,7 @@ export class Mundo {
 		const perfil: Perfil = new Perfil(usuario, this);
 		this.perfiles.push(perfil);
 		usuario.AgregarPerfil(perfil);
-		return this.nodoInicial.EstablecerInicial(usuario);
+		return this.nodoInicial.Entrar(usuario);
 	}
 
 	public ObtenerNombre(): string {
