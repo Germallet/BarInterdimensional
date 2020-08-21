@@ -10,3 +10,4 @@ export { MensajeDiscord as Mensaje } from './MensajeDiscord';
 export { PermisoDiscord as Permiso, GrupoDePermisosDiscord as GrupoDePermisos } from './PermisosDiscord';
 export { RolDiscord as Rol } from './RolDiscord';
 export { ServidorDiscord as Servidor } from './ServidorDiscord';
+export { ServicioDiscord as Servicio } from './ServicioDiscord';

@@ -3,9 +3,10 @@ import { ClienteDiscord } from './ClienteDiscord';
 import { EstadoDeVozDiscord } from './EstadoDeVozDiscord';
 import { MensajeDiscord } from './MensajeDiscord';
 import { ServidorDiscord } from './ServidorDiscord';
+import { ServicioDiscord } from './ServicioDiscord';
 
 export class BotDiscord {
-	private readonly bot: discord.Client = new discord.Client();
+	private readonly bot: discord.Client = ServicioDiscord.CrearCliente();
 
 	public async Conectarse(token: string): Promise<void> {
 		await this.bot.login(token);
