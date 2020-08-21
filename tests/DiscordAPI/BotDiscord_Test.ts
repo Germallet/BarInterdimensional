@@ -1,7 +1,6 @@
 import { assert } from 'chai';
 import * as Discord from '#discord-api';
 import { MockClient } from './Mocks/MockClient';
-import { doesNotMatch } from 'assert';
 
 describe('BotDiscord', function () {
 	let bot: Discord.Bot;
