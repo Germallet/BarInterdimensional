@@ -7,4 +7,9 @@ export class BaseDeDatos {
 		const tablaMundo: BD.mundoDelegate = this.prisma.mundo;
 		return tablaMundo.findMany();
 	}
+
+	public async ObtenerConfiguración(): Promise<BD.configuracion[]> {
+		const tablaConfiguración: BD.configuracionDelegate = this.prisma.configuracion;
+		return tablaConfiguración.findMany();
+	}
 }

@@ -4,12 +4,13 @@ import { Nodo } from './Nodo';
 import { Mundo } from './Mundo';
 import { Universo } from './Universo';
 import { Consola } from './Consola';
+import { Persistencia } from './Persistencia/Persistencia';
 
 export class GestorDeMundos {
 	private readonly mundos: Array<Mundo> = new Array<Mundo>();
 
 	public async CargarMundos(): Promise<void> {
-		const listaMundosBD: BD.mundo[] = await Universo.BaseDeDatos().ObtenerMundos();
+		const listaMundosBD: BD.mundo[] = await Persistencia.BaseDeDatos().ObtenerMundos();
 		await Promise.all(listaMundosBD.map((mundoBD) => this.CargarMundo(mundoBD.id)));
 	}
 

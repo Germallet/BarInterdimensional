@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model configuracion {
+  identificador String  @id
+  valor         String?
+  numerico      Boolean
+}
+
 model mundo {
   id String @id
 }
