@@ -2,12 +2,23 @@ import { Consola } from './Motor/Consola';
 import { Universo } from './Motor/Universo';
 import { Persistencia } from 'Motor/Persistencia/Persistencia';
 
-(async () => {
-	try {
+class Inicio {
+	public async Iniciar(): Promise<void> {
 		Consola.Normal('[INICIO]', 'Iniciando');
 		await Persistencia.Configuración().Cargar();
 		Universo.Dios().Conectarse();
-	} catch (e) {
-		throw e;
 	}
-})();
+
+	private async IniciarConfiguración(): Promise<void> {
+		await Persistencia.Configuración()
+			.Cargar()
+			.then(() => {
+				Consola.Normal('[CONFIGURACIÓN]', `Configuración cargada! (Cantidad de registros: ${Persistencia.Configuración().CantidadDeRegistros()})`);
+			})
+			.catch((error) => {
+				throw error;
+			});
+	}
+}
+
+new Inicio().Iniciar();

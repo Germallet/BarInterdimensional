@@ -1,6 +1,12 @@
 // Ansicolor: https://github.com/shiena/ansicolor/blob/master/README.md
 
 export abstract class Consola {
+	private static activa = true;
+
+	public Desactivar(): void {
+		Consola.activa = false;
+	}
+
 	private static ObtenerTiempo() {
 		const date = new Date();
 		return `[${new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().replace(/T/, ' ').replace(/\..+/, '')}]`;
@@ -13,10 +19,11 @@ export abstract class Consola {
 		}
 	}
 	private static LogExcepción(excepción: string): void {
-		console.log(`[CONSOLA] [ERROR] No se pudo imprimir un mensaje en la consola: ${excepción}`);
+		if (Consola.activa) console.log(`[CONSOLA] [ERROR] No se pudo imprimir un mensaje en la consola: ${excepción}`);
 	}
 
 	public static Normal(modulo: string, mensaje: string): void {
+		if (!Consola.activa) return;
 		try {
 			const texto = `\x1b[0m${mensaje}`;
 			this.LogConFormato(modulo, texto);
@@ -25,6 +32,7 @@ export abstract class Consola {
 		}
 	}
 	public static Warning(modulo: string, mensaje: string): void {
+		if (!Consola.activa) return;
 		try {
 			const texto = `\x1b[33m${mensaje}`;
 			this.LogConFormato(modulo, texto);
@@ -33,6 +41,7 @@ export abstract class Consola {
 		}
 	}
 	public static Error(modulo: string, mensaje: string): void {
+		if (!Consola.activa) return;
 		try {
 			const texto = `\x1b[31m${mensaje}`;
 			this.LogConFormato(modulo, texto);

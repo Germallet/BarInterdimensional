@@ -8,7 +8,8 @@
 		"baseUrl": "./",
 		"lib": ["es6", "dom"],
 		"paths": {
-			"#discord-api": ["../src/DiscordAPI"]
+			"#discord-api": ["../src/DiscordAPI"],
+			"#motor": ["../src/Motor"]
 		}
 	}
 }
