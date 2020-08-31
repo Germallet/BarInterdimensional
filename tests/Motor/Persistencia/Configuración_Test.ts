@@ -25,8 +25,6 @@ describe('Configuración', function () {
 			{ identificador: 'numero123', valor: '123', numerico: true },
 			{ identificador: 'textoComoNumero', valor: 'deberiaSerUnNumero', numerico: true }
 		]);
-		Motor.Persistencia.Configuración().Cargar();
-
 		Chai.assert.isRejected(Motor.Persistencia.Configuración().Cargar(), 'El registro numérico "textoComoNumero" no es válido (valor: "deberiaSerUnNumero)"');
 	});
 
