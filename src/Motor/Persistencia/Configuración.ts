@@ -19,14 +19,13 @@ export class Configuración {
 		} else {
 			const valorNumerico: number = parseInt(registro.valor);
 			if (isNaN(valorNumerico)) throw new Error(`El registro numérico "${registro.identificador}" no es válido (valor: "${registro.valor})"`);
-			this.registros[registro.identificador] = parseInt(registro.valor);
+			this.registros[registro.identificador] = valorNumerico;
 		}
 	}
 
 	public Obtener<T extends string | number>(identificador: string): T {
 		if (!(identificador in this.registros)) throw new Error('El registro buscado no existe');
-		const valorObtenido: T = this.registros[identificador] as T;
-		return valorObtenido;
+		return this.registros[identificador] as T;
 	}
 
 	public CantidadDeRegistros(): number {
