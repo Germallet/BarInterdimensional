@@ -5,7 +5,7 @@ import { Persistencia } from 'Motor/Persistencia/Persistencia';
 class Inicio {
 	public async Iniciar(): Promise<void> {
 		Consola.Normal('[INICIO]', 'Iniciando');
-		await Persistencia.Configuración().Cargar();
+		await this.IniciarConfiguración();
 		Universo.Dios().Conectarse();
 	}
 
