@@ -10,7 +10,7 @@ class Inicio {
 	}
 
 	private async IniciarConfiguración(): Promise<void> {
-		await Persistencia.Configuración()
+		return Persistencia.Configuración()
 			.Cargar()
 			.then(() => {
 				Consola.Normal('[CONFIGURACIÓN]', `Configuración cargada! (Cantidad de registros: ${Persistencia.Configuración().CantidadDeRegistros()})`);
