@@ -28,30 +28,27 @@ describe('Comandos', function () {
 
 	it('Ejecutar el comando sumarUno suma 1 al valor global', function () {
 		sumarUno.Ejecutar(null, null);
-
 		Chai.assert.equal(1, valorGlobal);
 	});
 
 	it('El comando operacion entiende sumarSumar y lo ejecuta', function () {
 		const nombreSumarUno: string = sumarUno.ObtenerNombre();
-
-		Chai.assert.isFulfilled(operación.Ejecutar([nombreSumarUno], null));
+		operación.Ejecutar([nombreSumarUno], null);
 		Chai.assert.equal(1, valorGlobal);
 	});
 
 	it('El comando operacion no entiende sumarDos', function () {
 		const nombreSumarTres: string = 'sumarTres';
-
 		Chai.assert.isRejected(operación.Ejecutar([nombreSumarTres], null), 'El comando "operación" no entiende "sumarTres".');
 	});
 
 	it('El gestor lee -Operación sumarUno y suma 1 al valor global', function () {
-		Chai.assert.isFulfilled(gestor.LeerComando('-operación sumarUno', null));
+		gestor.LeerComando('-operación sumarUno', null);
 		Chai.assert.equal(1, valorGlobal);
 	});
 
 	it('El gestor lee - Operación sumarUno y suma 1 al valor global', function () {
-		Chai.assert.isFulfilled(gestor.LeerComando('- operación sumarUno', null));
+		gestor.LeerComando('- operación sumarUno', null);
 		Chai.assert.equal(1, valorGlobal);
 	});
 
