@@ -37,8 +37,8 @@ export class Nodo {
 		}
 	}
 
-	public async AgregarAdyacente(adyacente: Nodo): Promise<void> {
-		this.adyacentes.push(adyacente);
+	public async AgregarAdyacentes(adyacentes: Nodo[]): Promise<void> {
+		adyacentes.forEach((nuevoAdyacente) => this.adyacentes.push(nuevoAdyacente));
 	}
 
 	public async EstablecerVisible(usuario: Usuario): Promise<void> {

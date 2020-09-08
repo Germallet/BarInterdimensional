@@ -25,4 +25,9 @@ export class BaseDeDatos {
 		const tablaNodo: Prisma.nodoDelegate = this.prisma.nodo;
 		await tablaNodo.update({ where: { id: idNodo }, data: datos });
 	}
+
+	public async ObtenerAdyacentes(idNodo: number): Promise<number[]> {
+		const tablaAdyacencias: Prisma.adyacenciaDelegate = this.prisma.adyacencia;
+		return (await tablaAdyacencias.findMany({ where: { origen: idNodo } })).map((adyacencia) => adyacencia.destino);
+	}
 }

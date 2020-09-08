@@ -32,18 +32,25 @@ export class Mundo {
 		}
 	}
 
-	private async CrearNodo(nodoPrisma: Prisma.nodo, categoría: Discord.Categoría) {
-		const nodo: Nodo = new Nodo(nodoPrisma.id, nodoPrisma.nombre);
-		await nodo.Generar(nodoPrisma, this.servidor, categoría);
-		this.nodos.push(nodo);
-	}
-
 	public async Generar(mundoPrisma: Prisma.mundo): Promise<void> {
 		const categoría: Discord.Categoría = await this.CargarOCrearCategoría(mundoPrisma.categoria);
 		const nodosPrisma: Prisma.nodo[] = await Persistencia.BaseDeDatos().ObtenerNodos(this.id);
 
-		await Promise.all(nodosPrisma.map((nodoPrisma) => this.CrearNodo(nodoPrisma, categoría)));
+		const instanciaciones: Array<[Prisma.nodo, Nodo]> = nodosPrisma.map((nodoPrisma) => [nodoPrisma, new Nodo(nodoPrisma.id, nodoPrisma.nombre)]);
+		const generaciónDeNodos: Array<[Nodo, Array<Nodo>]> = instanciaciones.map((tupla) => [tupla[1], instanciaciones.filter((otraTupla) => otraTupla[0].id == tupla[0].id).map((otraTupla) => otraTupla[1])]);
 
+		await Promise.all(
+			instanciaciones.map((tupla) => {
+				tupla[1].Generar(tupla[0], this.servidor, categoría);
+			})
+		);
+		await Promise.all(
+			generaciónDeNodos.map((tupla) => {
+				tupla[0].AgregarAdyacentes(tupla[1]);
+			})
+		);
+
+		generaciónDeNodos.forEach((tupla) => this.nodos.push(tupla[0]));
 		this.nodoInicial = this.nodos[0];
 		await Promise.all(this.servidor.ObtenerClientes().map((cliente) => this.CrearPerfil(Universo.Usuarios().ObtenerOCrearUsuario(cliente))));
 	}

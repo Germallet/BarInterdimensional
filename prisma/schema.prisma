@@ -21,10 +21,21 @@ model mundo {
 }
 
 model nodo {
-  id                Float   @default(dbgenerated()) @id
-  mundo             Float
-  nombre            String
-  canalvoz          String?
-  canaltexto        String?
-  mundo_mundoTonodo mundo   @relation(fields: [mundo], references: [id])
+  id                                  Float        @default(dbgenerated()) @id
+  mundo                               Float
+  nombre                              String
+  canalvoz                            String?
+  canaltexto                          String?
+  mundo_mundoTonodo                   mundo        @relation(fields: [mundo], references: [id])
+  adyacencia_adyacencia_destinoTonodo adyacencia[] @relation("adyacencia_destinoTonodo")
+  adyacencia_adyacencia_origenTonodo  adyacencia[] @relation("adyacencia_origenTonodo")
+}
+
+model adyacencia {
+  origen                        Float
+  destino                       Float
+  nodo_adyacencia_destinoTonodo nodo  @relation("adyacencia_destinoTonodo", fields: [destino], references: [id])
+  nodo_adyacencia_origenTonodo  nodo  @relation("adyacencia_origenTonodo", fields: [origen], references: [id])
+
+  @@id([origen, destino])
 }
