@@ -1,4 +1,4 @@
-import * as BD from '@prisma/client';
+import * as Prisma from '@prisma/client';
 import { Persistencia } from './Persistencia';
 
 export class Configuración {
@@ -8,12 +8,12 @@ export class Configuración {
 		this.LeerRegistros(await Persistencia.BaseDeDatos().ObtenerConfiguración());
 	}
 
-	private LeerRegistros(registros: BD.configuracion[]): void {
+	private LeerRegistros(registros: Prisma.configuracion[]): void {
 		this.registros = {};
 		registros.forEach((registro) => this.CargarRegistro(registro));
 	}
 
-	private CargarRegistro(registro: BD.configuracion): void {
+	private CargarRegistro(registro: Prisma.configuracion): void {
 		if (!registro.numerico) {
 			this.registros[registro.identificador] = registro.valor;
 		} else {

@@ -14,9 +14,10 @@ model configuracion {
 }
 
 model mundo {
-  id    Float   @default(dbgenerated()) @id
-  guild String?
-  nodo  nodo[]
+  id        Float   @default(dbgenerated()) @id
+  guild     String
+  categoria String?
+  nodo      nodo[]
 }
 
 model nodo {
@@ -24,6 +25,6 @@ model nodo {
   mundo             Float
   nombre            String
   canalvoz          String?
-  cantaltexto       String?
+  canaltexto        String?
   mundo_mundoTonodo mundo   @relation(fields: [mundo], references: [id])
 }

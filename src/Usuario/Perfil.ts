@@ -1,5 +1,5 @@
+import { Mundo } from '#universo';
 import { Usuario } from './Usuario';
-import { Mundo } from './Mundo';
 
 export class Perfil {
 	private readonly usuario: Usuario;

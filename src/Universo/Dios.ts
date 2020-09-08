@@ -1,10 +1,8 @@
 import * as Discord from '#discord-api';
-import { Usuario } from './Usuario';
-import { Mundo } from './Mundo';
-import { Consola } from './Consola';
+import { Usuario } from '#usuario';
 import { Universo } from './Universo';
-import { ArchivoWeb } from './ArchivoWeb';
-import { ConfiguraciónXML } from './ConfiguraciónXML';
+import { Mundo } from './Mundo';
+import { Consola } from '../Consola';
 
 export class Dios {
 	private readonly bot: Discord.Bot = new Discord.Bot();
@@ -47,14 +45,14 @@ export class Dios {
 	private async MensajeRecibido(mensaje: Discord.Mensaje): Promise<void> {
 		Consola.Normal('[DISCORD]', `${mensaje.ObtenerNombreDeAutor()}: ${mensaje.ObtenerContenido()}`);
 
-		if (mensaje.ObtenerContenido() == '--Generar' && mensaje.ObtenerArchivosAdjuntos().length == 1) {
+		/*if (mensaje.ObtenerContenido() == '--Generar' && mensaje.ObtenerArchivosAdjuntos().length == 1) {
 			const adjunto: Discord.ContenidoAdjunto = mensaje.ObtenerArchivosAdjuntos()[0];
 
-			const contenidoArchivo: string = await new ArchivoWeb().Leer(adjunto.ObtenerUrl());
+			const contenidoArchivo: string = await adjunto.Leer();
 			const configuración: ConfiguraciónXML = new ConfiguraciónXML(contenidoArchivo);
 
 			Universo.Mundos().ObtenerMundo(mensaje.ObtenerIdServidor()).Generar(configuración);
-		}
+		}*/
 	}
 
 	public async ObtenerServidor(id: string): Promise<Discord.Servidor> {

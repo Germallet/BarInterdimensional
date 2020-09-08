@@ -1,13 +1,13 @@
 import * as Chai from 'chai';
 import * as ChaiAsPromised from 'chai-as-promised';
-import * as Comando from '#comandos';
+import { Comando, ComandoIntermedio, ComandoFinal, GestorDeComandos } from '#bot';
 
 describe('Comandos', function () {
 	let valorGlobal: number;
-	const gestor: Comando.Gestor = new Comando.Gestor('-');
-	const operación: Comando.Intermedio = new Comando.Intermedio(['operación'], null);
-	const sumarUno: Comando.Final = new Comando.Final(['sumarUno'], () => (valorGlobal = valorGlobal + 1));
-	const tresVeces: Comando.Intermedio = new Comando.Intermedio(['tresVeces'], (comando: Comando.Base, parámetros: Array<string>, adjuntosDeMensaje) => {
+	const gestor: GestorDeComandos = new GestorDeComandos('-');
+	const operación: ComandoIntermedio = new ComandoIntermedio(['operación'], null);
+	const sumarUno: ComandoFinal = new ComandoFinal(['sumarUno'], () => (valorGlobal = valorGlobal + 1));
+	const tresVeces: ComandoIntermedio = new ComandoIntermedio(['tresVeces'], (comando: Comando, parámetros: Array<string>, adjuntosDeMensaje) => {
 		for (let i = 0; i < 3; i++) {
 			const nuevosParámetros: Array<string> = new Array<string>();
 			parámetros.forEach((parámetro) => {

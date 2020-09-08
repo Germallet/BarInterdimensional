@@ -1,10 +1,8 @@
 import * as discord from 'discord.js';
-import { CategoríaDiscord } from './CategoríaDiscord';
 import { CanalDeVozDiscord } from './CanalDeVozDiscord';
 import { CanalDeTextoDiscord } from './CanalDeTextoDiscord';
-import { CanalDiscord } from './CanalDiscord';
+import { CategoríaDiscord } from './CategoríaDiscord';
 import { RolDiscord } from './RolDiscord';
-import { Consola } from '../Motor/Consola';
 import { ClienteDiscord } from './ClienteDiscord';
 
 export class ServidorDiscord {
@@ -26,7 +24,7 @@ export class ServidorDiscord {
 		return this.servidor.id === id;
 	}
 
-	private async CrearCanal(nombre: string, opciones: discord.GuildCreateChannelOptions, creador: (canal: discord.ChannelResolvable) => CanalDiscord) {
+	private async CrearCanal<T>(nombre: string, opciones: discord.GuildCreateChannelOptions, creador: (canal: discord.ChannelResolvable) => T): Promise<T> {
 		const copiaServidor: discord.Guild = this.servidor;
 		return new Promise(function (resolver, rechazar) {
 			copiaServidor.channels.create(nombre, opciones).then(function (resultado: discord.ChannelResolvable) {
@@ -36,15 +34,33 @@ export class ServidorDiscord {
 	}
 
 	public async CrearCategoría(nombre: string): Promise<CategoríaDiscord> {
-		return this.CrearCanal(nombre, { type: 'category' }, (canal) => new CategoríaDiscord(canal as discord.CategoryChannel)) as Promise<CategoríaDiscord>;
+		return this.CrearCanal(nombre, { type: 'category' }, (canal) => new CategoríaDiscord(canal as discord.CategoryChannel));
 	}
 
 	public async CrearCanalDeTexto(nombre: string, categoría: CategoríaDiscord): Promise<CanalDeTextoDiscord> {
-		return this.CrearCanal(nombre, { type: 'text', parent: categoría.Obtener() }, (canal) => new CanalDeTextoDiscord(canal as discord.TextChannel)) as Promise<CanalDeTextoDiscord>;
+		return this.CrearCanal(nombre, { type: 'text', parent: categoría.Obtener() }, (canal) => new CanalDeTextoDiscord(canal as discord.TextChannel));
 	}
 
 	public async CrearCanalDeVoz(nombre: string, categoría: CategoríaDiscord): Promise<CanalDeVozDiscord> {
-		return this.CrearCanal(nombre, { type: 'voice', parent: categoría.Obtener() }, (canal) => new CanalDeVozDiscord(canal as discord.VoiceChannel)) as Promise<CanalDeVozDiscord>;
+		return this.CrearCanal(nombre, { type: 'voice', parent: categoría.Obtener() }, (canal) => new CanalDeVozDiscord(canal as discord.VoiceChannel));
+	}
+
+	public ObtenerCategoría(id: string): CategoríaDiscord {
+		const canal: discord.CategoryChannel = this.servidor.channels.cache.get(id) as discord.CategoryChannel;
+		if (canal == undefined) throw new Error(`No se pudo obtener la categoría ${id}`);
+		return new CategoríaDiscord(canal);
+	}
+
+	public ObtenerCanalDeTexto(id: string): CanalDeTextoDiscord {
+		const canal: discord.TextChannel = this.servidor.channels.cache.get(id) as discord.TextChannel;
+		if (canal == undefined) throw new Error(`No se pudo obtener el canal de texto ${id}`);
+		return new CanalDeTextoDiscord(canal);
+	}
+
+	public ObtenerCanalDeVoz(id: string): CanalDeVozDiscord {
+		const canal: discord.VoiceChannel = this.servidor.channels.cache.get(id) as discord.VoiceChannel;
+		if (canal == undefined) throw new Error(`No se pudo obtener el canal de voz ${id}`);
+		return new CanalDeVozDiscord(canal);
 	}
 
 	public async CrearRol(datos: discord.RoleData): Promise<RolDiscord> {
@@ -54,22 +70,5 @@ export class ServidorDiscord {
 				resolver(new RolDiscord(resultado));
 			}, rechazar);
 		});
-	}
-
-	private async BorrarCanales(): Promise<void> {
-		Promise.all(this.servidor.channels.cache.map((canal) => canal.delete().catch((excepción) => Consola.Warning('[SERVIDOR]', `Excepción al borrar canal "${canal.name}" para limpiado de mundo "${this.servidor.name}": "${excepción}"`))));
-	}
-
-	private async BorrarRoles(): Promise<void> {
-		Promise.all(
-			this.servidor.roles.cache.map((rol) => {
-				if (rol.name != '@everyone' && rol.name != 'Dios') rol.delete().catch((excepción) => Consola.Warning('[SERVIDOR]', `Excepción al borrar rol "${rol.name}" para limpiado de mundo "${this.servidor.name}": "${excepción}"`));
-			})
-		);
-	}
-
-	public async Limpiar(): Promise<void> {
-		this.BorrarCanales();
-		this.BorrarRoles();
 	}
 }

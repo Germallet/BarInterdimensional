@@ -1,5 +1,5 @@
 import * as Discord from '#discord-api';
-import { GestorDeComandos } from './Comandos/GestorDeComandos';
+import { GestorDeComandos } from './GestorDeComandos';
 
 export abstract class Bot {
 	private readonly bot: Discord.Bot = new Discord.Bot();

@@ -1,6 +1,6 @@
-import { Consola } from './Motor/Consola';
-import { Universo } from './Motor/Universo';
-import { Persistencia } from 'Motor/Persistencia/Persistencia';
+import { Universo } from '#universo';
+import { Persistencia } from '#persistencia';
+import { Consola } from './Consola';
 
 class Inicio {
 	public async Iniciar(): Promise<void> {

@@ -8,9 +8,11 @@
 		"baseUrl": "./src",
 		"lib": ["es6", "dom"],
 		"paths": {
+			"#bot": ["Bot"],
 			"#discord-api": ["DiscordAPI"],
-			"#motor": ["Motor"],
-			"#comandos": ["Motor/Comandos"]
+			"#persistencia": ["Persistencia"],
+			"#universo": ["Universo"],
+			"#usuario": ["Usuario"]
 		}
 	},
 	"include": ["src/**/*"]

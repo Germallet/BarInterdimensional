@@ -1,7 +1,7 @@
 import * as Discord from '#discord-api';
-import { Perfil } from './Perfil';
-import { Nodo } from './Nodo';
 import { Mutex } from 'async-mutex';
+import { Nodo } from '#universo';
+import { Perfil } from './Perfil';
 
 export class Usuario {
 	private readonly cliente: Discord.Cliente;

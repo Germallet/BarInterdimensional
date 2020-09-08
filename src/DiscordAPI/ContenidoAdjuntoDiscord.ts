@@ -1,4 +1,5 @@
 import * as discord from 'discord.js';
+import * as WebRequest from 'web-request';
 
 export class ContenidoAdjuntoDiscord {
 	private readonly adjunto: discord.MessageAttachment;
@@ -7,7 +8,7 @@ export class ContenidoAdjuntoDiscord {
 		this.adjunto = adjunto;
 	}
 
-	public ObtenerUrl(): string {
-		return this.adjunto.url;
+	public async Leer(): Promise<string> {
+		return (await WebRequest.get(this.adjunto.url)).content;
 	}
 }

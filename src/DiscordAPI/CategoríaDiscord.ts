@@ -1,7 +1,6 @@
 import * as discord from 'discord.js';
-import { CanalDiscord } from './CanalDiscord';
 
-export class CategoríaDiscord implements CanalDiscord {
+export class CategoríaDiscord {
 	private readonly categoría: discord.CategoryChannel;
 
 	public constructor(categoría: discord.CategoryChannel) {
@@ -12,11 +11,11 @@ export class CategoríaDiscord implements CanalDiscord {
 		return this.categoría;
 	}
 
-	public TieneId(id: string): boolean {
-		return this.categoría.id === id;
+	public ObtenerId(): string {
+		return this.categoría.id;
 	}
 
-	public EsMismoCanal(canal: CanalDiscord): boolean {
-		return canal != undefined && canal.TieneId(this.categoría.id);
+	public TieneId(id: string): boolean {
+		return this.categoría.id === id;
 	}
 }

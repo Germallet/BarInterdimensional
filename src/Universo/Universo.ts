@@ -1,6 +1,6 @@
 import { Dios } from './Dios';
+import { GestorDeUsuarios } from '#usuario';
 import { GestorDeMundos } from './GestorDeMundos';
-import { GestorDeUsuarios } from './GestorDeUsuarios';
 
 export class Universo {
 	private static readonly dios: Dios = new Dios();
