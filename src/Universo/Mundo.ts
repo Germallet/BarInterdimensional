@@ -4,7 +4,7 @@ import { Persistencia } from '#persistencia';
 import { Usuario, Perfil } from '#usuario';
 import { Nodo } from './Nodo';
 import { Universo } from './Universo';
-import { Consola } from '../Consola';
+import { Presence } from 'discord.js';
 
 export class Mundo {
 	private readonly id: number;
@@ -37,18 +37,17 @@ export class Mundo {
 		const nodosPrisma: Prisma.nodo[] = await Persistencia.BaseDeDatos().ObtenerNodos(this.id);
 
 		const instanciaciones: Array<[Prisma.nodo, Nodo]> = nodosPrisma.map((nodoPrisma) => [nodoPrisma, new Nodo(nodoPrisma.id, nodoPrisma.nombre)]);
-		const generaciónDeNodos: Array<[Nodo, Array<Nodo>]> = instanciaciones.map((tupla) => [tupla[1], instanciaciones.filter((otraTupla) => otraTupla[0].id == tupla[0].id).map((otraTupla) => otraTupla[1])]);
+		const generaciónDeNodos: Array<[Nodo, Array<Nodo>]> = instanciaciones.map((tupla) => [tupla[1], null]);
 
 		await Promise.all(
 			instanciaciones.map((tupla) => {
 				tupla[1].Generar(tupla[0], this.servidor, categoría);
 			})
 		);
-		await Promise.all(
-			generaciónDeNodos.map((tupla) => {
-				tupla[0].AgregarAdyacentes(tupla[1]);
-			})
-		);
+		for (const tupla of instanciaciones) {
+			const adyacentes: Array<Nodo> = (await Persistencia.BaseDeDatos().ObtenerAdyacentes(tupla[0].id)).map((id) => instanciaciones.find((tupla2) => tupla2[0].id == id)[1]);
+			tupla[1].AgregarAdyacentes(adyacentes);
+		}
 
 		generaciónDeNodos.forEach((tupla) => this.nodos.push(tupla[0]));
 		this.nodoInicial = this.nodos[0];

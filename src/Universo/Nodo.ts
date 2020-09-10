@@ -2,6 +2,7 @@ import * as Discord from '#discord-api';
 import * as Prisma from '@prisma/client';
 import { Persistencia } from '#persistencia';
 import { Usuario } from '#usuario';
+import { Consola } from 'Consola';
 
 export class Nodo {
 	private readonly id: number;
@@ -37,8 +38,14 @@ export class Nodo {
 		}
 	}
 
+	public Nombre(): string {
+		return this.nombre;
+	}
+
 	public async AgregarAdyacentes(adyacentes: Nodo[]): Promise<void> {
-		adyacentes.forEach((nuevoAdyacente) => this.adyacentes.push(nuevoAdyacente));
+		adyacentes.forEach((nuevoAdyacente) => {
+			this.adyacentes.push(nuevoAdyacente);
+		});
 	}
 
 	public async EstablecerVisible(usuario: Usuario): Promise<void> {
