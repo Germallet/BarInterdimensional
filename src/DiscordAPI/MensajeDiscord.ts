@@ -1,5 +1,5 @@
 import * as discord from 'discord.js';
-import { ContenidoAdjuntoDiscord } from './ContenidoAdjuntoDiscord';
+import { ArchivoAdjuntoDiscord } from './ArchivoAdjuntoDiscord';
 
 export class MensajeDiscord {
 	private readonly mensaje: discord.Message;
@@ -15,8 +15,8 @@ export class MensajeDiscord {
 		return this.mensaje.content;
 	}
 
-	public ObtenerArchivosAdjuntos(): ContenidoAdjuntoDiscord[] {
-		return this.mensaje.attachments.map((adjunto) => new ContenidoAdjuntoDiscord(adjunto));
+	public ObtenerArchivosAdjuntos(): ArchivoAdjuntoDiscord[] {
+		return this.mensaje.attachments.map((adjunto) => new ArchivoAdjuntoDiscord(adjunto));
 	}
 
 	public ObtenerIdServidor(): string {

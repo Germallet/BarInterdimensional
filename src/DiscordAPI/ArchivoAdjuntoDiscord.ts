@@ -1,7 +1,7 @@
 import * as discord from 'discord.js';
 import * as WebRequest from 'web-request';
 
-export class ContenidoAdjuntoDiscord {
+export class ArchivoAdjuntoDiscord {
 	private readonly adjunto: discord.MessageAttachment;
 
 	public constructor(adjunto: discord.MessageAttachment) {

@@ -64,7 +64,7 @@ export class Dios {
 	}
 
 	private async CargarMundo(parámetros: Array<string>, mensaje: Discord.Mensaje): Promise<void> {
-		const adjuntos: Array<Discord.ContenidoAdjunto> = mensaje.ObtenerArchivosAdjuntos();
+		const adjuntos: Array<Discord.ArchivoAdjunto> = mensaje.ObtenerArchivosAdjuntos();
 		if (parámetros.length != 0) throw new Error(`El comando -CargarMundo recibe parámetros y no espera ninguno`); // MEDIO AL PEDO TODOS ESTOS CHECKS PERO ESTE MÁS
 		if (adjuntos.length > 1) throw new Error(`El comando -CargarMundo recibe más de un archivo adjunto`);
 		if (adjuntos.length == 0) throw new Error(`El comando -CargarMundo espera un archivo adjunto y no recibe ninguni`);

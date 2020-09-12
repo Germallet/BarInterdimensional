@@ -18,6 +18,10 @@ export class ClienteDiscord {
 		return this.cliente.id;
 	}
 
+	public ObtenerImagenAvatar(): string {
+		return this.cliente.user.displayAvatarURL({ format: 'jpg' });
+	}
+
 	public TieneId(id: string): boolean {
 		return this.cliente.id === id;
 	}

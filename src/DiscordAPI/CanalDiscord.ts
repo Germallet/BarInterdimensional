@@ -2,7 +2,7 @@ import * as discord from 'discord.js';
 import { ClienteDiscord } from './ClienteDiscord';
 
 export class CanalDiscord<T extends discord.GuildChannel> {
-	private readonly canal: T;
+	protected readonly canal: T;
 	private permisos: discord.OverwriteResolvable[] = new Array<discord.OverwriteResolvable>();
 
 	public constructor(canal: T) {

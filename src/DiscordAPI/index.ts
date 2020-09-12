@@ -4,7 +4,7 @@ export { CanalDeVozDiscord as CanalDeVoz } from './CanalDeVozDiscord';
 export { CanalDiscord as Canal } from './CanalDiscord';
 export { CategoríaDiscord as Categoría } from './CategoríaDiscord';
 export { ClienteDiscord as Cliente } from './ClienteDiscord';
-export { ContenidoAdjuntoDiscord as ContenidoAdjunto } from './ContenidoAdjuntoDiscord';
+export { ArchivoAdjuntoDiscord as ArchivoAdjunto } from './ArchivoAdjuntoDiscord';
 export { EstadoDeVozDiscord as EstadoDeVoz } from './EstadoDeVozDiscord';
 export { MensajeDiscord as Mensaje } from './MensajeDiscord';
 export { PermisoDiscord as Permiso, GrupoDePermisosDiscord as GrupoDePermisos } from './PermisosDiscord';
