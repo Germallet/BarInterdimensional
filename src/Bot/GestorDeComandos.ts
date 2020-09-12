@@ -10,7 +10,7 @@ export class GestorDeComandos {
 		this.prefijoComando = prefijoComando;
 	}
 
-	public async LeerComando(mensaje: string, adjuntos: Array<Discord.ContenidoAdjunto>): Promise<void> {
+	public async LeerComando(mensaje: string, adjuntos: Discord.Mensaje): Promise<void> {
 		if (!mensaje.startsWith(this.prefijoComando)) return;
 		const parámetros: Array<string> = mensaje.substring(this.prefijoComando.length, mensaje.length).split(' '); //trimLeft().split(' ');
 		return this.comandoRaíz.Ejecutar(parámetros, adjuntos);

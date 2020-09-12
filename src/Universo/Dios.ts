@@ -3,9 +3,16 @@ import { Usuario } from '#usuario';
 import { Universo } from './Universo';
 import { Mundo } from './Mundo';
 import { Consola } from '../Consola';
+import { GestorDeComandos } from '../Bot/GestorDeComandos';
+import { ComandoFinal } from '#bot';
 
 export class Dios {
 	private readonly bot: Discord.Bot = new Discord.Bot();
+	private readonly gestorDeComandos: GestorDeComandos = new GestorDeComandos('-');
+
+	public constructor() {
+		this.AgregarComandos();
+	}
 
 	public async Conectarse(): Promise<void> {
 		this.EstablecerEventos();
@@ -44,18 +51,23 @@ export class Dios {
 
 	private async MensajeRecibido(mensaje: Discord.Mensaje): Promise<void> {
 		Consola.Normal('[DISCORD]', `${mensaje.ObtenerNombreDeAutor()}: ${mensaje.ObtenerContenido()}`);
-
-		/*if (mensaje.ObtenerContenido() == '--Generar' && mensaje.ObtenerArchivosAdjuntos().length == 1) {
-			const adjunto: Discord.ContenidoAdjunto = mensaje.ObtenerArchivosAdjuntos()[0];
-
-			const contenidoArchivo: string = await adjunto.Leer();
-			const configuración: ConfiguraciónXML = new ConfiguraciónXML(contenidoArchivo);
-
-			Universo.Mundos().ObtenerMundo(mensaje.ObtenerIdServidor()).Generar(configuración);
-		}*/
+		this.gestorDeComandos.LeerComando(mensaje.ObtenerContenido(), mensaje);
 	}
 
 	public async ObtenerServidor(id: string): Promise<Discord.Servidor> {
 		return this.bot.ObtenerServidor(id);
+	}
+
+	//======================== COMANDOS ========================//
+	private AgregarComandos(): void {
+		this.gestorDeComandos.AgregarComando(new ComandoFinal(['CargarMundo'], this.CargarMundo));
+	}
+
+	private async CargarMundo(parámetros: Array<string>, mensaje: Discord.Mensaje): Promise<void> {
+		const adjuntos: Array<Discord.ContenidoAdjunto> = mensaje.ObtenerArchivosAdjuntos();
+		if (parámetros.length != 0) throw new Error(`El comando -CargarMundo recibe parámetros y no espera ninguno`); // MEDIO AL PEDO TODOS ESTOS CHECKS PERO ESTE MÁS
+		if (adjuntos.length > 1) throw new Error(`El comando -CargarMundo recibe más de un archivo adjunto`);
+		if (adjuntos.length == 0) throw new Error(`El comando -CargarMundo espera un archivo adjunto y no recibe ninguni`);
+		const contenidoArchivo: string = await adjuntos[0].Leer();
 	}
 }

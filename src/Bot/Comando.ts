@@ -15,5 +15,5 @@ export abstract class Comando {
 		return this.nombres[0];
 	}
 
-	public abstract async Ejecutar(parámetros: Array<string>, adjuntos: Array<Discord.ContenidoAdjunto>): Promise<void>;
+	public abstract async Ejecutar(parámetros: Array<string>, adjuntos: Discord.Mensaje): Promise<void>;
 }

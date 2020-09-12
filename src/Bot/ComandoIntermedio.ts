@@ -3,19 +3,19 @@ import { Comando } from './Comando';
 
 export class ComandoIntermedio extends Comando {
 	private readonly comandos: Array<Comando> = new Array<Comando>();
-	private readonly acción: (siguienteComando: Comando, parámetros: Array<string>, adjuntos: Array<Discord.ContenidoAdjunto>) => void;
+	private readonly acción: (siguienteComando: Comando, parámetros: Array<string>, adjuntos: Discord.Mensaje) => void;
 
-	public constructor(nombres: Array<string>, acción: (siguienteComando: Comando, parámetros: Array<string>, adjuntos: Array<Discord.ContenidoAdjunto>) => void) {
+	public constructor(nombres: Array<string>, acción: (siguienteComando: Comando, parámetros: Array<string>, adjuntos: Discord.Mensaje) => void) {
 		super(nombres);
 		this.acción =
 			acción != null
 				? acción
-				: function acción(siguienteComando: Comando, parámetros: Array<string>, adjuntos: Array<Discord.ContenidoAdjunto>) {
+				: function acción(siguienteComando: Comando, parámetros: Array<string>, adjuntos: Discord.Mensaje) {
 						siguienteComando.Ejecutar(parámetros, adjuntos);
 				  };
 	}
 
-	public async Ejecutar(parámetros: Array<string>, adjuntos: Array<Discord.ContenidoAdjunto>): Promise<void> {
+	public async Ejecutar(parámetros: Array<string>, adjuntos: Discord.Mensaje): Promise<void> {
 		let nombreSiguienteComando: string;
 		do {
 			if (parámetros.length == 0) throw new Error(`El comando "${this.nombres[0]}" no recibe ningún parámetro.`);

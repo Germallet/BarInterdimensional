@@ -20,6 +20,6 @@ export abstract class Bot {
 	protected abstract Conectado(): void;
 
 	private async LeerComando(mensaje: Discord.Mensaje): Promise<void> {
-		return this.gestorDeComandos.LeerComando(mensaje.ObtenerContenido(), mensaje.ObtenerArchivosAdjuntos());
+		return this.gestorDeComandos.LeerComando(mensaje.ObtenerContenido(), mensaje);
 	}
 }
