@@ -23,9 +23,9 @@ describe('Mundo', function () {
 
 		const mundoPrisma: Prisma.mundo = { id: 1, guild: 'servidorTest', categoria: categoríaPreexistente.ObtenerId() };
 		await mockBD.EstablecerMundos([mundoPrisma]);
-		const mundo: Mundo = new Mundo(mundoPrisma, servidor);
+		const mundo: Mundo = new Mundo(mundoPrisma.id, servidor);
 
-		await mundo.Generar(mundoPrisma);
+		await mundo.GenerarDeBD(mundoPrisma);
 		Chai.assert.equal((await mockBD.ObtenerMundos())[0].categoria, categoríaPreexistente.ObtenerId(), 'Se cargó una nueva categoría');
 		Chai.assert.equal(servidor.CantidadCategorías(), 1, 'Se cargó una nueva categoría');
 	});
@@ -33,9 +33,9 @@ describe('Mundo', function () {
 	it('Generar crea la categoría (en la API y en BD) si no existe', async function () {
 		const mundoPrisma: Prisma.mundo = { id: 1, guild: 'servidorTest', categoria: 'inexistente' };
 		await mockBD.EstablecerMundos([mundoPrisma]);
-		const mundo: Mundo = new Mundo(mundoPrisma, servidor);
+		const mundo: Mundo = new Mundo(mundoPrisma.id, servidor);
 
-		await mundo.Generar(mundoPrisma);
+		await mundo.GenerarDeBD(mundoPrisma);
 		Chai.assert.equal((await mockBD.ObtenerMundos())[0].categoria, '0', 'No se cargó una nueva categoría');
 		Chai.assert.equal(servidor.CantidadCategorías(), 1, 'No se cargó una nueva categoría');
 	});
@@ -50,9 +50,9 @@ describe('Mundo', function () {
 
 		const mundoPrisma: Prisma.mundo = { id: 111, guild: 'servidorTest', categoria: 'inexistente' };
 		await mockBD.EstablecerMundos([mundoPrisma]);
-		const mundo: Mundo = new Mundo(mundoPrisma, servidor);
+		const mundo: Mundo = new Mundo(mundoPrisma.id, servidor);
 
-		await mundo.Generar(mundoPrisma);
+		await mundo.GenerarDeBD(mundoPrisma);
 		Chai.assert.equal((await mockBD.ObtenerMundos())[0].categoria, '0', 'No se cargó una nueva categoría');
 		Chai.assert.equal(servidor.CantidadCanalDeTexto(), 3, 'No se crearon los canales de texto esperados');
 		Chai.assert.equal(servidor.CantidadCanalDeVoz(), 3, 'No se crearon los canales de voz esperados');
