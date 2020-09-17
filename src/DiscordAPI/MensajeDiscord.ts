@@ -19,7 +19,7 @@ export class MensajeDiscord {
 		return this.mensaje.attachments.map((adjunto) => new ArchivoAdjuntoDiscord(adjunto));
 	}
 
-	public ObtenerIdServidor(): string {
-		return this.mensaje.guild.id;
+	public Responder(contenido: string): void {
+		this.mensaje.channel.send(contenido);
 	}
 }
