@@ -8,6 +8,7 @@
 		"baseUrl": "./src",
 		"lib": ["es6", "dom"],
 		"paths": {
+			"#utilidades": ["Utilidades"],
 			"#bot": ["Bot"],
 			"#discord-api": ["DiscordAPI"],
 			"#persistencia": ["Persistencia"],

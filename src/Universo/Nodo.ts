@@ -46,6 +46,10 @@ export class Nodo {
 			this.adyacentes.push(nuevoAdyacente);
 		});
 	}
+	public async AgregarAdyacente(nuevoAdyacente: Nodo, idAdyacente: number): Promise<void> {
+		await Persistencia.BaseDeDatos().CrearAdyacencia({ nodo_adyacencia_origenTonodo: { connect: { id: this.id } }, nodo_adyacencia_destinoTonodo: { connect: { id: idAdyacente } } });
+		this.adyacentes.push(nuevoAdyacente);
+	}
 
 	public async EstablecerVisible(usuario: Usuario): Promise<void> {
 		await this.canalVoz.CambiarPermisos(this.PermisoDeCanalDeVoz(usuario));
@@ -114,5 +118,11 @@ export class Nodo {
 			['READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'VIEW_CHANNEL'], //"VIEW_CHANNEL"
 			['ADD_REACTIONS', 'SEND_TTS_MESSAGES', 'MANAGE_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'MENTION_EVERYONE', 'USE_EXTERNAL_EMOJIS', 'MANAGE_WEBHOOKS', 'MANAGE_EMOJIS']
 		);
+	}
+
+	public async Borrar(): Promise<void> {
+		await Persistencia.BaseDeDatos().BorrarAdyacencias(this.id);
+		await this.canalTexto.Borrar();
+		await this.canalVoz.Borrar();
 	}
 }

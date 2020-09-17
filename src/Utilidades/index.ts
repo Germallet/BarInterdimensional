@@ -1,0 +1,1 @@
+export { Diccionario } from './Diccionario';

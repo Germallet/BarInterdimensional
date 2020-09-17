@@ -1,5 +1,6 @@
 import * as discord from 'discord.js';
 import { ClienteDiscord } from './ClienteDiscord';
+import { promises } from 'fs';
 
 export class CanalDiscord<T extends discord.GuildChannel> {
 	protected readonly canal: T;
@@ -33,6 +34,10 @@ export class CanalDiscord<T extends discord.GuildChannel> {
 
 	public async RemoverPermisos(cliente: ClienteDiscord): Promise<void> {
 		await this.canal.permissionOverwrites.get(cliente.ObtenerId())?.delete();
+	}
+
+	public async Borrar(): Promise<void> {
+		await this.canal.delete();
 	}
 
 	public EsMismoCanal(canal: CanalDiscord<T>): boolean {

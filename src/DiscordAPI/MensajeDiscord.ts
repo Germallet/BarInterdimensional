@@ -19,7 +19,7 @@ export class MensajeDiscord {
 		return this.mensaje.attachments.map((adjunto) => new ArchivoAdjuntoDiscord(adjunto));
 	}
 
-	public Responder(contenido: string): void {
-		this.mensaje.channel.send(contenido);
+	public async Responder(contenido: string): Promise<void> {
+		await this.mensaje.channel.send(contenido);
 	}
 }

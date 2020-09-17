@@ -5,6 +5,7 @@ import { Mundo } from './Mundo';
 import { Consola } from '../Consola';
 import { GestorDeComandos } from '../Bot/GestorDeComandos';
 import { ComandoFinal } from '#bot';
+import { GeneradorXML } from 'Persistencia/GeneradorXML';
 
 export class Dios {
 	private readonly bot: Discord.Bot = new Discord.Bot();
@@ -68,6 +69,11 @@ export class Dios {
 		if (parámetros.length != 0) throw new Error(`El comando -CargarMundo recibe parámetros y no espera ninguno`); // MEDIO AL PEDO TODOS ESTOS CHECKS PERO ESTE MÁS
 		if (adjuntos.length > 1) throw new Error(`El comando -CargarMundo recibe más de un archivo adjunto`);
 		if (adjuntos.length == 0) throw new Error(`El comando -CargarMundo espera un archivo adjunto y no recibe ninguni`);
-		//const contenidoArchivo: string = await adjuntos[0].Leer();
+
+		try {
+			new GeneradorXML(await adjuntos[0].Leer()).Generar();
+		} catch (error) {
+			await mensaje.Responder(`Error al cargar mundo: ${error}`);
+		}
 	}
 }
