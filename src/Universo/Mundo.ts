@@ -4,7 +4,6 @@ import { Persistencia } from '#persistencia';
 import { Usuario, Perfil } from '#usuario';
 import { Nodo } from './Nodo';
 import { Universo } from './Universo';
-import { Presence } from 'discord.js';
 
 export class Mundo {
 	private readonly id: number;

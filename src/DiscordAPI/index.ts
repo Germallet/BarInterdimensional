@@ -5,6 +5,7 @@ export { CanalDiscord as Canal } from './CanalDiscord';
 export { CategoríaDiscord as Categoría } from './CategoríaDiscord';
 export { ClienteDiscord as Cliente } from './ClienteDiscord';
 export { ArchivoAdjuntoDiscord as ArchivoAdjunto } from './ArchivoAdjuntoDiscord';
+export { ImagenAdjuntaDiscord as ImagenAdjunta } from './ImagenAdjuntaDiscord';
 export { EstadoDeVozDiscord as EstadoDeVoz } from './EstadoDeVozDiscord';
 export { MensajeDiscord as Mensaje } from './MensajeDiscord';
 export { PermisoDiscord as Permiso, GrupoDePermisosDiscord as GrupoDePermisos } from './PermisosDiscord';

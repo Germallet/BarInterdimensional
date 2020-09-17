@@ -21,9 +21,9 @@ export class Dios {
 	}
 
 	private EstablecerEventos(): void {
-		this.bot.EstablecerEventoNuevoCliente(this.CrearPerfil);
-		this.bot.EstablecerEventoCambioDeEstadoDeVoz(this.CambioDeEstadoDeVoz);
-		this.bot.EstablecerEventoMensajeRecibido(this.MensajeRecibido);
+		this.bot.EstablecerEventoNuevoCliente((cliente: Discord.Cliente) => this.CrearPerfil(cliente));
+		this.bot.EstablecerEventoCambioDeEstadoDeVoz((estadoAnterior: Discord.EstadoDeVoz, estadoNuevo: Discord.EstadoDeVoz) => this.CambioDeEstadoDeVoz(estadoAnterior, estadoNuevo));
+		this.bot.EstablecerEventoMensajeRecibido((mensaje: Discord.Mensaje) => this.MensajeRecibido(mensaje));
 	}
 
 	protected async Conectado(): Promise<void> {
@@ -68,6 +68,6 @@ export class Dios {
 		if (parámetros.length != 0) throw new Error(`El comando -CargarMundo recibe parámetros y no espera ninguno`); // MEDIO AL PEDO TODOS ESTOS CHECKS PERO ESTE MÁS
 		if (adjuntos.length > 1) throw new Error(`El comando -CargarMundo recibe más de un archivo adjunto`);
 		if (adjuntos.length == 0) throw new Error(`El comando -CargarMundo espera un archivo adjunto y no recibe ninguni`);
-		const contenidoArchivo: string = await adjuntos[0].Leer();
+		//const contenidoArchivo: string = await adjuntos[0].Leer();
 	}
 }
