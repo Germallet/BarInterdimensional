@@ -21,7 +21,7 @@
 		"prisma-introspect": "npx prisma introspect",
 		"start": "node -r ./paths.js build/inicio.js",
 		"start-dev": "node -r dotenv/config -nolazy --inspect -r ./paths.js build/inicio.js",
-		"test": "ts-mocha --exit --inspect --paths tests/**/*.ts"
+		"test": "ts-mocha --exit --inspect --file ./tests/configTests.js --paths tests/**/*.ts"
 	},
 	"dependencies": {
 		"@prisma/client": "^2.7.1",

@@ -1,5 +1,4 @@
-import * as Chai from 'chai';
-import * as ChaiAsPromised from 'chai-as-promised';
+import { assert } from 'chai';
 import * as Prisma from '@prisma/client';
 import { Nodo } from '#universo';
 import { Persistencia } from '#persistencia';
@@ -11,7 +10,6 @@ describe('Nodo', function () {
 	let mockBD: MockBaseDeDatos;
 
 	beforeEach(() => {
-		Chai.use(ChaiAsPromised);
 		mockBD = new MockBaseDeDatos();
 		Persistencia.ReemplazarBaseDeDatos(mockBD);
 		servidor = new MockServidor();
@@ -25,9 +23,9 @@ describe('Nodo', function () {
 		await nodo.Generar(nodoPrisma, servidor, null);
 		const nodosPrisma: Prisma.nodo[] = await mockBD.ObtenerNodos(111);
 
-		Chai.assert.isTrue(nodo.TieneCanalDeVoz(servidor.ObtenerCanalDeVoz('0')), 'El nodo no obtuvo el correctamente el canal de voz');
-		Chai.assert.isTrue(nodo.TieneCanalDeTexto(servidor.ObtenerCanalDeTexto('1')), 'El nodo no obtuvo el correctamente el canal de texto');
-		Chai.assert.isTrue(
+		assert.isTrue(nodo.TieneCanalDeVoz(servidor.ObtenerCanalDeVoz('0')), 'El nodo no obtuvo el correctamente el canal de voz');
+		assert.isTrue(nodo.TieneCanalDeTexto(servidor.ObtenerCanalDeTexto('1')), 'El nodo no obtuvo el correctamente el canal de texto');
+		assert.isTrue(
 			nodosPrisma.every((nodoPrisma) => nodoPrisma.canalvoz == '0' && nodoPrisma.canaltexto == '1'),
 			'No se guardaron los nodos en la Base de Datos'
 		);
@@ -43,8 +41,8 @@ describe('Nodo', function () {
 		await nodo.Generar(nodoPrisma, servidor, null);
 		const nodosPrisma: Prisma.nodo[] = await mockBD.ObtenerNodos(111);
 
-		Chai.assert.isTrue(nodo.TieneCanalDeVoz(servidor.ObtenerCanalDeVoz('0')), 'El nodo no obtuvo el correctamente el canal de voz');
-		Chai.assert.isTrue(nodo.TieneCanalDeTexto(servidor.ObtenerCanalDeTexto('1')), 'El nodo no obtuvo el correctamente el canal de texto');
-		Chai.assert.isTrue(nodosPrisma.length == 0, 'Se guardaron los nodos en la Base de Datos');
+		assert.isTrue(nodo.TieneCanalDeVoz(servidor.ObtenerCanalDeVoz('0')), 'El nodo no obtuvo el correctamente el canal de voz');
+		assert.isTrue(nodo.TieneCanalDeTexto(servidor.ObtenerCanalDeTexto('1')), 'El nodo no obtuvo el correctamente el canal de texto');
+		assert.isTrue(nodosPrisma.length == 0, 'Se guardaron los nodos en la Base de Datos');
 	});
 });

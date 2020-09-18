@@ -1,5 +1,4 @@
-import * as Chai from 'chai';
-import * as ChaiAsPromised from 'chai-as-promised';
+import { assert } from 'chai';
 import * as Prisma from '@prisma/client';
 import * as Discord from '#discord-api';
 import { Mundo } from '#universo';
@@ -12,7 +11,6 @@ describe('Mundo', function () {
 	let mockBD: MockBaseDeDatos;
 
 	beforeEach(() => {
-		Chai.use(ChaiAsPromised);
 		mockBD = new MockBaseDeDatos();
 		Persistencia.ReemplazarBaseDeDatos(mockBD);
 		servidor = new MockServidor();
@@ -26,8 +24,8 @@ describe('Mundo', function () {
 		const mundo: Mundo = new Mundo(mundoPrisma.id, servidor);
 
 		await mundo.GenerarDeBD(mundoPrisma);
-		Chai.assert.equal((await mockBD.ObtenerMundos())[0].categoria, categoríaPreexistente.ObtenerId(), 'Se cargó una nueva categoría');
-		Chai.assert.equal(servidor.CantidadCategorías(), 1, 'Se cargó una nueva categoría');
+		assert.equal((await mockBD.ObtenerMundos())[0].categoria, categoríaPreexistente.ObtenerId(), 'Se cargó una nueva categoría');
+		assert.equal(servidor.CantidadCategorías(), 1, 'Se cargó una nueva categoría');
 	});
 
 	it('Generar crea la categoría (en la API y en BD) si no existe', async function () {
@@ -36,8 +34,8 @@ describe('Mundo', function () {
 		const mundo: Mundo = new Mundo(mundoPrisma.id, servidor);
 
 		await mundo.GenerarDeBD(mundoPrisma);
-		Chai.assert.equal((await mockBD.ObtenerMundos())[0].categoria, '0', 'No se cargó una nueva categoría');
-		Chai.assert.equal(servidor.CantidadCategorías(), 1, 'No se cargó una nueva categoría');
+		assert.equal((await mockBD.ObtenerMundos())[0].categoria, '0', 'No se cargó una nueva categoría');
+		assert.equal(servidor.CantidadCategorías(), 1, 'No se cargó una nueva categoría');
 	});
 
 	it('Generar crea los nodos correspondientes', async function () {
@@ -53,8 +51,8 @@ describe('Mundo', function () {
 		const mundo: Mundo = new Mundo(mundoPrisma.id, servidor);
 
 		await mundo.GenerarDeBD(mundoPrisma);
-		Chai.assert.equal((await mockBD.ObtenerMundos())[0].categoria, '0', 'No se cargó una nueva categoría');
-		Chai.assert.equal(servidor.CantidadCanalDeTexto(), 3, 'No se crearon los canales de texto esperados');
-		Chai.assert.equal(servidor.CantidadCanalDeVoz(), 3, 'No se crearon los canales de voz esperados');
+		assert.equal((await mockBD.ObtenerMundos())[0].categoria, '0', 'No se cargó una nueva categoría');
+		assert.equal(servidor.CantidadCanalDeTexto(), 3, 'No se crearon los canales de texto esperados');
+		assert.equal(servidor.CantidadCanalDeVoz(), 3, 'No se crearon los canales de voz esperados');
 	});
 });
